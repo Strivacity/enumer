@@ -76,6 +76,8 @@ func TestEndToEnd(t *testing.T) {
 		// Names are known to be ASCII and long enough.
 		var typeName string
 		var transformNameMethod string
+		var setDelimiter string
+		strictSet := false
 		marshalers := make(map[string]struct{})
 
 		switch name {
@@ -88,6 +90,13 @@ func TestEndToEnd(t *testing.T) {
 		case "marshal_yaml.go":
 			typeName = "MarshalYaml"
 			marshalers["yaml"] = struct{}{}
+		case "set.go":
+			typeName = "LaxDay"
+			setDelimiter = " "
+		case "set_strict.go":
+			typeName = "StrictDay"
+			setDelimiter = " "
+			strictSet = true
 		case "sql.go":
 			typeName = "SQL"
 			marshalers["sql"] = struct{}{}
@@ -131,6 +140,12 @@ func TestEndToEnd(t *testing.T) {
 		var args []string
 		if transformNameMethod != "" {
 			args = append(args, "-transform", transformNameMethod)
+		}
+		if setDelimiter != "" {
+			args = append(args, "-setdelimiter", setDelimiter)
+			if strictSet {
+				args = append(args, "-strictset")
+			}
 		}
 		for m := range marshalers {
 			args = append(args, "-"+m)

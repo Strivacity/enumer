@@ -41,6 +41,9 @@ var tests = []Golden{
 	{"dayTrimPrefixMultiple", dayPrefixMultipleIn, config{trimPrefix: "Day,Night"}},
 	{"dayWithPrefix", dayIn, config{addPrefix: "Day"}},
 	{"dayTrimAndPrefix", dayPrefixIn, config{trimPrefix: "Day", addPrefix: "Night"}},
+	{"daySet", dayIn, config{setDelimiter: ","}},
+	{"daySetTrimPrefix", dayPrefixIn, config{setDelimiter: ",", trimPrefix: "Day"}},
+	{"daySetStrict", dayIn, config{setDelimiter: ",", strictSet: true}},
 }
 
 // Each example starts with "type XXX [u]int", with a single space separating them.
