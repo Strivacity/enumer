@@ -1,0 +1,179 @@
+
+const _DayName = "MondayTuesdayWednesdayThursdayFridaySaturdaySunday"
+
+var _DayIndex = [...]uint8{0, 6, 13, 22, 30, 36, 44, 50}
+
+const _DayLowerName = "mondaytuesdaywednesdaythursdayfridaysaturdaysunday"
+
+func (i Day) String() string {
+	if i < 0 || i >= Day(len(_DayIndex)-1) {
+		return fmt.Sprintf("Day(%d)", i)
+	}
+	return _DayName[_DayIndex[i]:_DayIndex[i+1]]
+}
+
+// An "invalid array index" compiler error signifies that the constant values have changed.
+// Re-run the stringer command to generate them again.
+func _DayNoOp() {
+	var x [1]struct{}
+	_ = x[Monday-(0)]
+	_ = x[Tuesday-(1)]
+	_ = x[Wednesday-(2)]
+	_ = x[Thursday-(3)]
+	_ = x[Friday-(4)]
+	_ = x[Saturday-(5)]
+	_ = x[Sunday-(6)]
+}
+
+var _DayValues = []Day{Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday}
+
+var _DayNameToValueMap = map[string]Day{
+	_DayName[0:6]:        Monday,
+	_DayLowerName[0:6]:   Monday,
+	_DayName[6:13]:       Tuesday,
+	_DayLowerName[6:13]:  Tuesday,
+	_DayName[13:22]:      Wednesday,
+	_DayLowerName[13:22]: Wednesday,
+	_DayName[22:30]:      Thursday,
+	_DayLowerName[22:30]: Thursday,
+	_DayName[30:36]:      Friday,
+	_DayLowerName[30:36]: Friday,
+	_DayName[36:44]:      Saturday,
+	_DayLowerName[36:44]: Saturday,
+	_DayName[44:50]:      Sunday,
+	_DayLowerName[44:50]: Sunday,
+}
+
+var _DayNames = []string{
+	_DayName[0:6],
+	_DayName[6:13],
+	_DayName[13:22],
+	_DayName[22:30],
+	_DayName[30:36],
+	_DayName[36:44],
+	_DayName[44:50],
+}
+
+// DayString retrieves an enum value from the enum constants string name.
+// Throws an error if the param is not part of the enum.
+func DayString(s string) (Day, error) {
+	if val, ok := _DayNameToValueMap[s]; ok {
+		return val, nil
+	}
+	return 0, fmt.Errorf("%s does not belong to Day values", s)
+}
+
+// DayValues returns all values of the enum
+func DayValues() []Day {
+	return _DayValues
+}
+
+// DayStrings returns a slice of all String values of the enum
+func DayStrings() []string {
+	strs := make([]string, len(_DayNames))
+	copy(strs, _DayNames)
+	return strs
+}
+
+// IsADay returns "true" if the value is listed in the enum definition. "false" otherwise
+func (i Day) IsADay() bool {
+	for _, v := range _DayValues {
+		if i == v {
+			return true
+		}
+	}
+	return false
+}
+
+// DaySet is a combination of Day values
+type DaySet uint8
+
+func (i DaySet) String() string {
+	elements := i.Elements()
+	elementStrings := make([]string, len(elements))
+	for _, e := range elements {
+		elementStrings = append(elementStrings, e.String())
+	}
+	return strings.Join(elementStrings, ",")
+}
+
+func (i DaySet) Elements() []Day {
+	elements := make([]Day, 0, bits.OnesCount8(uint8(i)))
+	for value, flag := range _DayToFlagMap {
+		if i.Test(flag) {
+			elements = append(elements, value)
+		}
+	}
+	return elements
+}
+
+// Test returns true if all Day values in mask are set, false otherwise.
+func (i DaySet) Test(mask DaySet) bool {
+	return i&mask == mask
+}
+
+// DaySetString retrieves an enum set value from the "," delimited list of Day constant string names.
+// Ignores elements in the list which are not part of the Day enum.
+func DaySetString(s string) (DaySet, error) {
+	i := DaySet(0)
+	for _, s := range strings.Split(s, ",") {
+		v, err := DayString(s)
+		if err != nil {
+			continue
+		}
+		flag, ok := _DayToFlagMap[v]
+		if !ok { // this should not happen if the generator is correct
+			continue
+		}
+		i |= flag
+	}
+	return i, nil
+}
+
+// IsADaySet returns "true" if the value is a set of values listed in the Day enum definition. "false" otherwise
+func (i DaySet) IsADaySet() bool {
+	return i&_DaySetBitmask == i
+}
+
+// An "invalid array index" compiler error signifies that the constant values have changed.
+// Re-run the stringer command to generate them again.
+func _DaySetNoOp() {
+	var x [1]struct{}
+	_ = x[DaySetMonday-(1)]
+	_ = x[DaySetTuesday-(2)]
+	_ = x[DaySetWednesday-(4)]
+	_ = x[DaySetThursday-(8)]
+	_ = x[DaySetFriday-(16)]
+	_ = x[DaySetSaturday-(32)]
+	_ = x[DaySetSunday-(64)]
+}
+
+// DaySet flags
+const (
+	DaySetMonday DaySet = 1 << iota
+	DaySetTuesday
+	DaySetWednesday
+	DaySetThursday
+	DaySetFriday
+	DaySetSaturday
+	DaySetSunday
+)
+
+var _DayToFlagMap = map[Day]DaySet{
+	Monday:    DaySetMonday,
+	Tuesday:   DaySetTuesday,
+	Wednesday: DaySetWednesday,
+	Thursday:  DaySetThursday,
+	Friday:    DaySetFriday,
+	Saturday:  DaySetSaturday,
+	Sunday:    DaySetSunday,
+}
+
+const _DaySetBitmask = DaySetMonday |
+	DaySetTuesday |
+	DaySetWednesday |
+	DaySetThursday |
+	DaySetFriday |
+	DaySetSaturday |
+	DaySetSunday
+

@@ -148,7 +148,7 @@ func (i *%[1]s) UnmarshalJSON(data []byte) error {
 }
 `
 
-func (g *Generator) buildJSONMethods(runs [][]Value, typeName string, runsThreshold int) {
+func (g *Generator) buildJSONMethods(typeName string) {
 	g.Printf(jsonMethods, typeName)
 }
 
@@ -168,7 +168,7 @@ func (i *%[1]s) UnmarshalText(text []byte) error {
 }
 `
 
-func (g *Generator) buildTextMethods(runs [][]Value, typeName string, runsThreshold int) {
+func (g *Generator) buildTextMethods(typeName string) {
 	g.Printf(textMethods, typeName)
 }
 
@@ -193,6 +193,21 @@ func (i *%[1]s) UnmarshalYAML(unmarshal func(interface{}) error) error {
 }
 `
 
-func (g *Generator) buildYAMLMethods(runs [][]Value, typeName string, runsThreshold int) {
+func (g *Generator) buildYAMLMethods(typeName string) {
 	g.Printf(yamlMethods, typeName)
+}
+
+func (g *Generator) buildMarshalMethods(typeName string, cfg config) {
+	if cfg.json {
+		g.buildJSONMethods(typeName)
+	}
+	if cfg.text {
+		g.buildTextMethods(typeName)
+	}
+	if cfg.yaml {
+		g.buildYAMLMethods(typeName)
+	}
+	if cfg.sql {
+		g.addValueAndScanMethod(typeName)
+	}
 }

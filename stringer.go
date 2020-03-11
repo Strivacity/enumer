@@ -54,6 +54,8 @@ type config struct {
 	trimPrefix      string
 	addPrefix       string
 	lineComment     bool
+	setDelimiter    string
+	strictSet       bool
 }
 
 var cfg = config{}
@@ -69,6 +71,8 @@ func init() {
 	flag.StringVar(&cfg.trimPrefix, "trimprefix", "", "transform each item name by removing a prefix. Default: \"\"")
 	flag.StringVar(&cfg.addPrefix, "addprefix", "", "transform each item name by adding a prefix. Default: \"\"")
 	flag.BoolVar(&cfg.lineComment, "linecomment", false, "use line comment text as printed text when present")
+	flag.StringVar(&cfg.setDelimiter, "setdelimiter", "", "if non-empty, a set-of-enumitems type will be generated using the provided string as delimiter for (un)marshaling. Default: \"\"")
+	flag.BoolVar(&cfg.strictSet, "strictset", false, "if true, return error when encountering unknown enum value in set, ignore those otherwise. Default: false")
 }
 
 var comments arrayFlags
@@ -138,6 +142,10 @@ func main() {
 	}
 	if cfg.json {
 		g.Printf("\t\"encoding/json\"\n")
+	}
+	if cfg.setDelimiter != "" {
+		g.Printf("\t\"math/bits\"\n")
+		g.Printf("\t\"strings\"\n")
 	}
 	g.Printf(")\n")
 
@@ -462,17 +470,12 @@ func (g *Generator) generate(typeName string, cfg config) {
 	g.buildNoOpOrderChangeDetect(runs, typeName)
 
 	g.buildBasicExtras(runs, typeName, runsThreshold)
-	if cfg.json {
-		g.buildJSONMethods(runs, typeName, runsThreshold)
-	}
-	if cfg.text {
-		g.buildTextMethods(runs, typeName, runsThreshold)
-	}
-	if cfg.yaml {
-		g.buildYAMLMethods(runs, typeName, runsThreshold)
-	}
-	if cfg.sql {
-		g.addValueAndScanMethod(typeName)
+
+	g.buildMarshalMethods(typeName, cfg)
+
+	if cfg.setDelimiter != "" {
+		g.addSetType(values, typeName, cfg)
+		g.buildMarshalMethods(typeName+"Set", cfg)
 	}
 }
 
