@@ -22,50 +22,25 @@ import (
 type Golden struct {
 	name  string
 	input string // input; the package clause is provided when running the test.
+	cfg   config
 }
 
-var golden = []Golden{
-	{"day", dayIn},
-	{"offset", offsetIn},
-	{"gap", gapIn},
-	{"num", numIn},
-	{"unum", unumIn},
-	{"prime", primeIn},
-}
-
-var goldenJSON = []Golden{
-	{"primeJson", primeIn},
-}
-var goldenText = []Golden{
-	{"primeText", primeIn},
-}
-
-var goldenYAML = []Golden{
-	{"primeYaml", primeIn},
-}
-
-var goldenSQL = []Golden{
-	{"primeSql", primeIn},
-}
-
-var goldenJSONAndSQL = []Golden{
-	{"primeJsonAndSql", primeIn},
-}
-
-var goldenTrimPrefix = []Golden{
-	{"dayTrimPrefix", dayPrefixIn},
-}
-
-var goldenTrimPrefixMultiple = []Golden{
-	{"dayTrimPrefixMultiple", dayPrefixMultipleIn},
-}
-
-var goldenWithPrefix = []Golden{
-	{"dayWithPrefix", dayIn},
-}
-
-var goldenTrimAndAddPrefix = []Golden{
-	{"dayTrimAndPrefix", dayPrefixIn},
+var tests = []Golden{
+	{"day", dayIn, config{}},
+	{"offset", offsetIn, config{}},
+	{"gap", gapIn, config{}},
+	{"num", numIn, config{}},
+	{"unum", unumIn, config{}},
+	{"prime", primeIn, config{}},
+	{"primeJson", primeIn, config{json: true}},
+	{"primeText", primeIn, config{text: true}},
+	{"primeYaml", primeIn, config{yaml: true}},
+	{"primeSql", primeIn, config{sql: true}},
+	{"primeJsonAndSql", primeIn, config{json: true, sql: true}},
+	{"dayTrimPrefix", dayPrefixIn, config{trimPrefix: "Day"}},
+	{"dayTrimPrefixMultiple", dayPrefixMultipleIn, config{trimPrefix: "Day,Night"}},
+	{"dayWithPrefix", dayIn, config{addPrefix: "Day"}},
+	{"dayTrimAndPrefix", dayPrefixIn, config{trimPrefix: "Day", addPrefix: "Night"}},
 }
 
 // Each example starts with "type XXX [u]int", with a single space separating them.
@@ -180,39 +155,14 @@ const (
 `
 
 func TestGolden(t *testing.T) {
-	for _, test := range golden {
-		runGoldenTest(t, test, config{})
-	}
-	for _, test := range goldenJSON {
-		runGoldenTest(t, test, config{json: true})
-	}
-	for _, test := range goldenText {
-		runGoldenTest(t, test, config{text: true})
-	}
-	for _, test := range goldenYAML {
-		runGoldenTest(t, test, config{yaml: true})
-	}
-	for _, test := range goldenSQL {
-		runGoldenTest(t, test, config{sql: true})
-	}
-	for _, test := range goldenJSONAndSQL {
-		runGoldenTest(t, test, config{json: true, sql: true})
-	}
-	for _, test := range goldenTrimPrefix {
-		runGoldenTest(t, test, config{trimPrefix: "Day"})
-	}
-	for _, test := range goldenTrimPrefixMultiple {
-		runGoldenTest(t, test, config{trimPrefix: "Day,Night"})
-	}
-	for _, test := range goldenWithPrefix {
-		runGoldenTest(t, test, config{addPrefix: "Day"})
-	}
-	for _, test := range goldenTrimAndAddPrefix {
-		runGoldenTest(t, test, config{trimPrefix: "Day", addPrefix: "Night"})
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			runGoldenTest(t, test)
+		})
 	}
 }
 
-func runGoldenTest(t *testing.T, test Golden, cfg config) {
+func runGoldenTest(t *testing.T, test Golden) {
 	goldenFile := fmt.Sprintf("./goldendata/%v.golden", test.name)
 	expectedBytes, err := ioutil.ReadFile(goldenFile)
 	if err != nil {
@@ -244,9 +194,9 @@ func runGoldenTest(t *testing.T, test Golden, cfg config) {
 	// Extract the name and type of the constant from the first line.
 	tokens := strings.SplitN(test.input, " ", 3)
 	if len(tokens) != 3 {
-		t.Fatalf("%s: need type declaration on first line", test.name)
+		t.Fatal("need type declaration on first line")
 	}
-	g.generate(tokens[1], cfg)
+	g.generate(tokens[1], test.cfg)
 	got := string(g.format())
 	if got != expected {
 		// Use this to help build a golden text when changes are needed
@@ -254,6 +204,6 @@ func runGoldenTest(t *testing.T, test Golden, cfg config) {
 		//if err != nil {
 		//	t.Error(err)
 		//}
-		t.Errorf("%s: got\n====\n%s====\nexpected\n====%s\n====\n%[1]s failed", test.name, got, expected)
+		t.Errorf("got\n====\n%s====\nexpected\n====\n%s====\n", got, expected)
 	}
 }

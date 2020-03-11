@@ -116,14 +116,15 @@ func TestEndToEnd(t *testing.T) {
 			transformNameMethod = "noop"
 		}
 
-		stringerCompileAndRun(t, dir, stringer, typeName, name, transformNameMethod)
+		t.Run(fmt.Sprintf("%s:%s", name, typeName), func(t *testing.T) {
+			stringerCompileAndRun(t, dir, stringer, typeName, name, transformNameMethod)
+		})
 	}
 }
 
 // stringerCompileAndRun runs stringer for the named file and compiles and
 // runs the target binary in directory dir. That binary will panic if the String method is incorrect.
 func stringerCompileAndRun(t *testing.T, dir, stringer, typeName, fileName, transformNameMethod string) {
-	t.Logf("run: %s %s\n", fileName, typeName)
 	source := filepath.Join(dir, fileName)
 	err := copy(source, filepath.Join("testdata", fileName))
 	if err != nil {

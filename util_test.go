@@ -16,6 +16,7 @@ type u []uint64
 type uu [][]uint64
 
 type SplitTest struct {
+	name   string
 	input  u
 	output uu
 	signed bool
@@ -31,47 +32,38 @@ var (
 
 var splitTests = []SplitTest{
 	// No need for a test for the empty case; that's picked off before splitIntoRuns.
-	// Single value.
-	{u{1}, uu{u{1}}, false},
-	// Out of order.
-	{u{3, 2, 1}, uu{u{1, 2, 3}}, true},
-	// Out of order.
-	{u{3, 2, 1}, uu{u{1, 2, 3}}, false},
-	// A gap at the beginning.
-	{u{1, 33, 32, 31}, uu{u{1}, u{31, 32, 33}}, true},
-	// A gap in the middle, in mixed order.
-	{u{33, 7, 32, 31, 9, 8}, uu{u{7, 8, 9}, u{31, 32, 33}}, true},
-	// Gaps throughout
-	{u{33, 44, 1, 32, 45, 31}, uu{u{1}, u{31, 32, 33}, u{44, 45}}, true},
-	// Unsigned values spanning 0.
-	{u{m1, m0, m1Spanning0, m2, m2Spanning0}, uu{u{m0, m1, m2}, u{m2Spanning0, m1Spanning0}}, false},
-	// Signed values spanning 0
-	{u{m1, m0, m1Spanning0, m2, m2Spanning0}, uu{u{m2Spanning0, m1Spanning0, m0, m1, m2}}, true},
+	{"single value", u{1}, uu{u{1}}, false},
+	{"out of order signed", u{3, 2, 1}, uu{u{1, 2, 3}}, true},
+	{"out of order unsigned", u{3, 2, 1}, uu{u{1, 2, 3}}, false},
+	{"gap at the beginning", u{1, 33, 32, 31}, uu{u{1}, u{31, 32, 33}}, true},
+	{"gap in the middle, mixed order", u{33, 7, 32, 31, 9, 8}, uu{u{7, 8, 9}, u{31, 32, 33}}, true},
+	{"gaps throughout", u{33, 44, 1, 32, 45, 31}, uu{u{1}, u{31, 32, 33}, u{44, 45}}, true},
+	{"values spanning 0 signed", u{m1, m0, m1Spanning0, m2, m2Spanning0}, uu{u{m2Spanning0, m1Spanning0, m0, m1, m2}}, true},
+	{"values spanning 0 unsigned", u{m1, m0, m1Spanning0, m2, m2Spanning0}, uu{u{m0, m1, m2}, u{m2Spanning0, m1Spanning0}}, false},
 }
 
 func TestSplitIntoRuns(t *testing.T) {
-Outer:
-	for n, test := range splitTests {
-		values := make([]Value, len(test.input))
-		for i, v := range test.input {
-			values[i] = Value{"", "", v, test.signed, fmt.Sprint(v)}
-		}
-		runs := splitIntoRuns(values)
-		if len(runs) != len(test.output) {
-			t.Errorf("#%d: %v: got %d runs; expected %d", n, test.input, len(runs), len(test.output))
-			continue
-		}
-		for i, run := range runs {
-			if len(run) != len(test.output[i]) {
-				t.Errorf("#%d: got %v; expected %v", n, runs, test.output)
-				continue Outer
+	for _, test := range splitTests {
+		t.Run(test.name, func(t *testing.T) {
+			values := make([]Value, len(test.input))
+			for i, v := range test.input {
+				values[i] = Value{"", "", v, test.signed, fmt.Sprint(v)}
 			}
-			for j, v := range run {
-				if v.value != test.output[i][j] {
-					t.Errorf("#%d: got %v; expected %v", n, runs, test.output)
-					continue Outer
+			runs := splitIntoRuns(values)
+			if len(runs) != len(test.output) {
+				t.Fatalf("got %d runs; expected %d", len(runs), len(test.output))
+			}
+			for i, run := range runs {
+				if len(run) != len(test.output[i]) {
+					t.Fatalf("got %v; expected %v", runs, test.output)
+				}
+				for j, v := range run {
+					if v.value != test.output[i][j] {
+						t.Fatalf("got %v; expected %v", runs, test.output)
+					}
 				}
 			}
-		}
+
+		})
 	}
 }
