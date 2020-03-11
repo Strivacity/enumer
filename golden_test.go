@@ -181,38 +181,38 @@ const (
 
 func TestGolden(t *testing.T) {
 	for _, test := range golden {
-		runGoldenTest(t, test, false, false, false, false, "", "")
+		runGoldenTest(t, test, config{})
 	}
 	for _, test := range goldenJSON {
-		runGoldenTest(t, test, true, false, false, false, "", "")
+		runGoldenTest(t, test, config{json: true})
 	}
 	for _, test := range goldenText {
-		runGoldenTest(t, test, false, false, false, true, "", "")
+		runGoldenTest(t, test, config{text: true})
 	}
 	for _, test := range goldenYAML {
-		runGoldenTest(t, test, false, true, false, false, "", "")
+		runGoldenTest(t, test, config{yaml: true})
 	}
 	for _, test := range goldenSQL {
-		runGoldenTest(t, test, false, false, true, false, "", "")
+		runGoldenTest(t, test, config{sql: true})
 	}
 	for _, test := range goldenJSONAndSQL {
-		runGoldenTest(t, test, true, false, true, false, "", "")
+		runGoldenTest(t, test, config{json: true, sql: true})
 	}
 	for _, test := range goldenTrimPrefix {
-		runGoldenTest(t, test, false, false, false, false, "Day", "")
+		runGoldenTest(t, test, config{trimPrefix: "Day"})
 	}
 	for _, test := range goldenTrimPrefixMultiple {
-		runGoldenTest(t, test, false, false, false, false, "Day,Night", "")
+		runGoldenTest(t, test, config{trimPrefix: "Day,Night"})
 	}
 	for _, test := range goldenWithPrefix {
-		runGoldenTest(t, test, false, false, false, false, "", "Day")
+		runGoldenTest(t, test, config{addPrefix: "Day"})
 	}
 	for _, test := range goldenTrimAndAddPrefix {
-		runGoldenTest(t, test, false, false, false, false, "Day", "Night")
+		runGoldenTest(t, test, config{trimPrefix: "Day", addPrefix: "Night"})
 	}
 }
 
-func runGoldenTest(t *testing.T, test Golden, generateJSON, generateYAML, generateSQL, generateText bool, trimPrefix string, prefix string) {
+func runGoldenTest(t *testing.T, test Golden, cfg config) {
 	goldenFile := fmt.Sprintf("./goldendata/%v.golden", test.name)
 	expectedBytes, err := ioutil.ReadFile(goldenFile)
 	if err != nil {
@@ -246,7 +246,7 @@ func runGoldenTest(t *testing.T, test Golden, generateJSON, generateYAML, genera
 	if len(tokens) != 3 {
 		t.Fatalf("%s: need type declaration on first line", test.name)
 	}
-	g.generate(tokens[1], generateJSON, generateYAML, generateSQL, generateText, "noop", trimPrefix, prefix, false)
+	g.generate(tokens[1], cfg)
 	got := string(g.format())
 	if got != expected {
 		// Use this to help build a golden text when changes are needed

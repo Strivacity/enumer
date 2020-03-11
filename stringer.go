@@ -43,18 +43,33 @@ func (af *arrayFlags) Set(value string) error {
 	return nil
 }
 
-var (
-	typeNames       = flag.String("type", "", "comma-separated list of type names; must be set")
-	sql             = flag.Bool("sql", false, "if true, the Scanner and Valuer interface will be implemented.")
-	json            = flag.Bool("json", false, "if true, json marshaling methods will be generated. Default: false")
-	yaml            = flag.Bool("yaml", false, "if true, yaml marshaling methods will be generated. Default: false")
-	text            = flag.Bool("text", false, "if true, text marshaling methods will be generated. Default: false")
-	output          = flag.String("output", "", "output file name; default srcdir/<type>_string.go")
-	transformMethod = flag.String("transform", "noop", "enum item name transformation method. Default: noop")
-	trimPrefix      = flag.String("trimprefix", "", "transform each item name by removing a prefix. Default: \"\"")
-	addPrefix       = flag.String("addprefix", "", "transform each item name by adding a prefix. Default: \"\"")
-	linecomment     = flag.Bool("linecomment", false, "use line comment text as printed text when present")
-)
+type config struct {
+	typeNames       string
+	sql             bool
+	json            bool
+	yaml            bool
+	text            bool
+	output          string
+	transformMethod string
+	trimPrefix      string
+	addPrefix       string
+	lineComment     bool
+}
+
+var cfg = config{}
+
+func init() {
+	flag.StringVar(&cfg.typeNames, "type", "", "comma-separated list of type names; must be set")
+	flag.BoolVar(&cfg.sql, "sql", false, "if true, the Scanner and Valuer interface will be implemented.")
+	flag.BoolVar(&cfg.json, "json", false, "if true, json marshaling methods will be generated. Default: false")
+	flag.BoolVar(&cfg.yaml, "yaml", false, "if true, yaml marshaling methods will be generated. Default: false")
+	flag.BoolVar(&cfg.text, "text", false, "if true, text marshaling methods will be generated. Default: false")
+	flag.StringVar(&cfg.output, "output", "", "output file name; default srcdir/<type>_string.go")
+	flag.StringVar(&cfg.transformMethod, "transform", "noop", "enum item name transformation method. Default: noop")
+	flag.StringVar(&cfg.trimPrefix, "trimprefix", "", "transform each item name by removing a prefix. Default: \"\"")
+	flag.StringVar(&cfg.addPrefix, "addprefix", "", "transform each item name by adding a prefix. Default: \"\"")
+	flag.BoolVar(&cfg.lineComment, "linecomment", false, "use line comment text as printed text when present")
+}
 
 var comments arrayFlags
 
@@ -79,11 +94,11 @@ func main() {
 	log.SetPrefix("enumer: ")
 	flag.Usage = Usage
 	flag.Parse()
-	if len(*typeNames) == 0 {
+	if len(cfg.typeNames) == 0 {
 		flag.Usage()
 		os.Exit(2)
 	}
-	typs := strings.Split(*typeNames, ",")
+	typs := strings.Split(cfg.typeNames, ",")
 
 	// We accept either one directory or a list of files. Which do we have?
 	args := flag.Args()
@@ -118,24 +133,24 @@ func main() {
 	g.Printf("\n")
 	g.Printf("import (\n")
 	g.Printf("\t\"fmt\"\n")
-	if *sql {
+	if cfg.sql {
 		g.Printf("\t\"database/sql/driver\"\n")
 	}
-	if *json {
+	if cfg.json {
 		g.Printf("\t\"encoding/json\"\n")
 	}
 	g.Printf(")\n")
 
 	// Run generate for each type.
 	for _, typeName := range typs {
-		g.generate(typeName, *json, *yaml, *sql, *text, *transformMethod, *trimPrefix, *addPrefix, *linecomment)
+		g.generate(typeName, cfg)
 	}
 
 	// Format the output.
 	src := g.format()
 
 	// Figure out filename to write to
-	outputName := *output
+	outputName := cfg.output
 	if outputName == "" {
 		baseName := fmt.Sprintf("%s_enumer.go", typs[0])
 		outputName = filepath.Join(dir, strings.ToLower(baseName))
@@ -397,11 +412,10 @@ func (g *Generator) prefixValueNames(values []Value, prefix string) {
 }
 
 // generate produces the String method for the named type.
-func (g *Generator) generate(typeName string, includeJSON, includeYAML, includeSQL, includeText bool,
-	transformMethod string, trimPrefix string, addPrefix string, lineComment bool) {
+func (g *Generator) generate(typeName string, cfg config) {
 	values := make([]Value, 0, 100)
 	for _, file := range g.pkg.files {
-		file.lineComment = lineComment
+		file.lineComment = cfg.lineComment
 		// Set the state for this run of the walker.
 		file.typeName = typeName
 		file.values = nil
@@ -415,13 +429,13 @@ func (g *Generator) generate(typeName string, includeJSON, includeYAML, includeS
 		log.Fatalf("no values defined for type %s", typeName)
 	}
 
-	for _, prefix := range strings.Split(trimPrefix, ",") {
+	for _, prefix := range strings.Split(cfg.trimPrefix, ",") {
 		g.trimValueNames(values, prefix)
 	}
 
-	g.transformValueNames(values, transformMethod)
+	g.transformValueNames(values, cfg.transformMethod)
 
-	g.prefixValueNames(values, addPrefix)
+	g.prefixValueNames(values, cfg.addPrefix)
 
 	runs := splitIntoRuns(values)
 	// The decision of which pattern to use depends on the number of
@@ -448,16 +462,16 @@ func (g *Generator) generate(typeName string, includeJSON, includeYAML, includeS
 	g.buildNoOpOrderChangeDetect(runs, typeName)
 
 	g.buildBasicExtras(runs, typeName, runsThreshold)
-	if includeJSON {
+	if cfg.json {
 		g.buildJSONMethods(runs, typeName, runsThreshold)
 	}
-	if includeText {
+	if cfg.text {
 		g.buildTextMethods(runs, typeName, runsThreshold)
 	}
-	if includeYAML {
+	if cfg.yaml {
 		g.buildYAMLMethods(runs, typeName, runsThreshold)
 	}
-	if includeSQL {
+	if cfg.sql {
 		g.addValueAndScanMethod(typeName)
 	}
 }
