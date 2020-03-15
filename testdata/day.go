@@ -32,7 +32,7 @@ func main() {
 	ck(127, "Day(127)")
 	ckDayString(Sunday, "Sunday")
 	ckDayString(Sunday, "sunday")
-
+	ckDayStringError("Christmas")
 }
 
 func ck(day Day, str string) {
@@ -48,6 +48,12 @@ func ckDayString(day Day, str string) {
 	}
 	if d != day {
 		panic("day.go: " + str)
+	}
+}
 
+func ckDayStringError(str string) {
+	_, err := DayString(str)
+	if err == nil {
+		panic("day.go: expected error")
 	}
 }

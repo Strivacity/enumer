@@ -76,8 +76,21 @@ func TestEndToEnd(t *testing.T) {
 		// Names are known to be ASCII and long enough.
 		var typeName string
 		var transformNameMethod string
+		marshalers := make(map[string]struct{})
 
 		switch name {
+		case "marshal_json.go":
+			typeName = "MarshalJSON"
+			marshalers["json"] = struct{}{}
+		case "marshal_text.go":
+			typeName = "MarshalText"
+			marshalers["text"] = struct{}{}
+		case "marshal_yaml.go":
+			typeName = "MarshalYaml"
+			marshalers["yaml"] = struct{}{}
+		case "sql.go":
+			typeName = "SQL"
+			marshalers["sql"] = struct{}{}
 		case "transform_snake.go":
 			typeName = "SnakeCaseValue"
 			transformNameMethod = "snake"
@@ -113,18 +126,24 @@ func TestEndToEnd(t *testing.T) {
 			transformNameMethod = "whitespace"
 		default:
 			typeName = fmt.Sprintf("%c%s", name[0]+'A'-'a', name[1:len(name)-len(".go")])
-			transformNameMethod = "noop"
 		}
 
+		var args []string
+		if transformNameMethod != "" {
+			args = append(args, "-transform", transformNameMethod)
+		}
+		for m := range marshalers {
+			args = append(args, "-"+m)
+		}
 		t.Run(fmt.Sprintf("%s:%s", name, typeName), func(t *testing.T) {
-			stringerCompileAndRun(t, dir, stringer, typeName, name, transformNameMethod)
+			stringerCompileAndRun(t, dir, stringer, typeName, name, args...)
 		})
 	}
 }
 
 // stringerCompileAndRun runs stringer for the named file and compiles and
 // runs the target binary in directory dir. That binary will panic if the String method is incorrect.
-func stringerCompileAndRun(t *testing.T, dir, stringer, typeName, fileName, transformNameMethod string) {
+func stringerCompileAndRun(t *testing.T, dir, stringer, typeName, fileName string, opts ...string) {
 	source := filepath.Join(dir, fileName)
 	err := copy(source, filepath.Join("testdata", fileName))
 	if err != nil {
@@ -132,7 +151,8 @@ func stringerCompileAndRun(t *testing.T, dir, stringer, typeName, fileName, tran
 	}
 	stringSource := filepath.Join(dir, typeName+"_string.go")
 	// Run stringer in temporary directory.
-	err = run(stringer, "-type", typeName, "-output", stringSource, "-transform", transformNameMethod, source)
+	args := append(opts, "-type", typeName, "-output", stringSource, source)
+	err = run(stringer, args...)
 	if err != nil {
 		t.Fatal(err)
 	}
