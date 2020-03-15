@@ -93,6 +93,9 @@ func TestEndToEnd(t *testing.T) {
 		case "set.go":
 			typeName = "LaxDay"
 			setDelimiter = " "
+		case "set_big.go":
+			typeName = "Country"
+			setDelimiter = " "
 		case "set_strict.go":
 			typeName = "StrictDay"
 			setDelimiter = " "

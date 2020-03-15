@@ -1,0 +1,1299 @@
+
+const _CountryName = "AfghanistanAlbaniaAlgeriaAndorraAngolaAntiguaAndBarbudaArgentinaArmeniaAustraliaAustriaAzerbaijanTheBahamasBahrainBangladeshBarbadosBelarusBelgiumBelizeBeninBhutanBoliviaBosniaAndHerzegovinaBotswanaBrazilBruneiBulgariaBurkinaFasoBurundiCaboVerdeCambodiaCameroonCanadaCentralAfricanRepublicChadChileChinaColombiaComorosDemocraticRepublicOfTheCongoRepublicOfTheCongoCostaRicaCôteDIvoireCroatiaCubaCyprusCzechRepublicDenmarkDjiboutiDominicaDominicanRepublicEastTimorEcuadorEgyptElSalvadorEquatorialGuineaEritreaEstoniaEswatiniEthiopiaFijiFinlandFranceGabonTheGambiaGeorgiaGermanyGhanaGreeceGrenadaGuatemalaGuineaGuineaBissauGuyanaHaitiHondurasHungaryIcelandIndiaIndonesiaIranIraqIrelandIsraelItalyJamaicaJapanJordanKazakhstanKenyaKiribatiNorthKoreaSouthKoreaKosovoKuwaitKyrgyzstanLaosLatviaLebanonLesothoLiberiaLibyaLiechtensteinLithuaniaLuxembourgMadagascarMalawiMalaysiaMaldivesMaliMaltaMarshallIslandsMauritaniaMauritiusMexicoFederatedStatesOfMicronesiaMoldovaMonacoMongoliaMontenegroMoroccoMozambiqueMyanmarNamibiaNauruNepalNetherlandsNewZealandNicaraguaNigerNigeriaNorthMacedoniaNorwayOmanPakistanPalauPanamaPapuaNewGuineaParaguayPeruPhilippinesPolandPortugalQatarRomaniaRussiaRwandaSaintKittsAndNevisSaintLuciaSaintVincentAndTheGrenadinesSamoaSanMarinoSaoTomeAndPrincipeSaudiArabiaSenegalSerbiaSeychellesSierraLeoneSingaporeSlovakiaSloveniaSolomonIslandsSomaliaSouthAfricaSpainSriLankaSudanSouthSudanSurinameSwedenSwitzerlandSyriaTaiwanTajikistanTanzaniaThailandTogoTongaTrinidadAndTobagoTunisiaTurkeyTurkmenistanTuvaluUgandaUkraineUnitedArabEmiratesUnitedKingdomUnitedStatesUruguayUzbekistanVanuatuVaticanCityVenezuelaVietnamYemenZambiaZimbabwe"
+
+var _CountryIndex = [...]uint16{0, 11, 18, 25, 32, 38, 55, 64, 71, 80, 87, 97, 107, 114, 124, 132, 139, 146, 152, 157, 163, 170, 190, 198, 204, 210, 218, 229, 236, 245, 253, 261, 267, 289, 293, 298, 303, 311, 318, 346, 364, 373, 385, 392, 396, 402, 415, 422, 430, 438, 455, 464, 471, 476, 486, 502, 509, 516, 524, 532, 536, 543, 549, 554, 563, 570, 577, 582, 588, 595, 604, 610, 622, 628, 633, 641, 648, 655, 660, 669, 673, 677, 684, 690, 695, 702, 707, 713, 723, 728, 736, 746, 756, 762, 768, 778, 782, 788, 795, 802, 809, 814, 827, 836, 846, 856, 862, 870, 878, 882, 887, 902, 912, 921, 927, 954, 961, 967, 975, 985, 992, 1002, 1009, 1016, 1021, 1026, 1037, 1047, 1056, 1061, 1068, 1082, 1088, 1092, 1100, 1105, 1111, 1125, 1133, 1137, 1148, 1154, 1162, 1167, 1174, 1180, 1186, 1204, 1214, 1242, 1247, 1256, 1274, 1285, 1292, 1298, 1308, 1319, 1328, 1336, 1344, 1358, 1365, 1376, 1381, 1389, 1394, 1404, 1412, 1418, 1429, 1434, 1440, 1450, 1458, 1466, 1470, 1475, 1492, 1499, 1505, 1517, 1523, 1529, 1536, 1554, 1567, 1579, 1586, 1596, 1603, 1614, 1623, 1630, 1635, 1641, 1649}
+
+const _CountryLowerName = "afghanistanalbaniaalgeriaandorraangolaantiguaandbarbudaargentinaarmeniaaustraliaaustriaazerbaijanthebahamasbahrainbangladeshbarbadosbelarusbelgiumbelizebeninbhutanboliviabosniaandherzegovinabotswanabrazilbruneibulgariaburkinafasoburundicaboverdecambodiacamerooncanadacentralafricanrepublicchadchilechinacolombiacomorosdemocraticrepublicofthecongorepublicofthecongocostaricacôtedivoirecroatiacubacyprusczechrepublicdenmarkdjiboutidominicadominicanrepubliceasttimorecuadoregyptelsalvadorequatorialguineaeritreaestoniaeswatiniethiopiafijifinlandfrancegabonthegambiageorgiagermanyghanagreecegrenadaguatemalaguineaguineabissauguyanahaitihondurashungaryicelandindiaindonesiairaniraqirelandisraelitalyjamaicajapanjordankazakhstankenyakiribatinorthkoreasouthkoreakosovokuwaitkyrgyzstanlaoslatvialebanonlesotholiberialibyaliechtensteinlithuanialuxembourgmadagascarmalawimalaysiamaldivesmalimaltamarshallislandsmauritaniamauritiusmexicofederatedstatesofmicronesiamoldovamonacomongoliamontenegromoroccomozambiquemyanmarnamibianaurunepalnetherlandsnewzealandnicaraguanigernigerianorthmacedonianorwayomanpakistanpalaupanamapapuanewguineaparaguayperuphilippinespolandportugalqatarromaniarussiarwandasaintkittsandnevissaintluciasaintvincentandthegrenadinessamoasanmarinosaotomeandprincipesaudiarabiasenegalserbiaseychellessierraleonesingaporeslovakiasloveniasolomonislandssomaliasouthafricaspainsrilankasudansouthsudansurinameswedenswitzerlandsyriataiwantajikistantanzaniathailandtogotongatrinidadandtobagotunisiaturkeyturkmenistantuvaluugandaukraineunitedarabemiratesunitedkingdomunitedstatesuruguayuzbekistanvanuatuvaticancityvenezuelavietnamyemenzambiazimbabwe"
+
+func (i Country) String() string {
+	if i < 0 || i >= Country(len(_CountryIndex)-1) {
+		return fmt.Sprintf("Country(%d)", i)
+	}
+	return _CountryName[_CountryIndex[i]:_CountryIndex[i+1]]
+}
+
+// An "invalid array index" compiler error signifies that the constant values have changed.
+// Re-run the stringer command to generate them again.
+func _CountryNoOp() {
+	var x [1]struct{}
+	_ = x[Afghanistan-(0)]
+	_ = x[Albania-(1)]
+	_ = x[Algeria-(2)]
+	_ = x[Andorra-(3)]
+	_ = x[Angola-(4)]
+	_ = x[AntiguaAndBarbuda-(5)]
+	_ = x[Argentina-(6)]
+	_ = x[Armenia-(7)]
+	_ = x[Australia-(8)]
+	_ = x[Austria-(9)]
+	_ = x[Azerbaijan-(10)]
+	_ = x[TheBahamas-(11)]
+	_ = x[Bahrain-(12)]
+	_ = x[Bangladesh-(13)]
+	_ = x[Barbados-(14)]
+	_ = x[Belarus-(15)]
+	_ = x[Belgium-(16)]
+	_ = x[Belize-(17)]
+	_ = x[Benin-(18)]
+	_ = x[Bhutan-(19)]
+	_ = x[Bolivia-(20)]
+	_ = x[BosniaAndHerzegovina-(21)]
+	_ = x[Botswana-(22)]
+	_ = x[Brazil-(23)]
+	_ = x[Brunei-(24)]
+	_ = x[Bulgaria-(25)]
+	_ = x[BurkinaFaso-(26)]
+	_ = x[Burundi-(27)]
+	_ = x[CaboVerde-(28)]
+	_ = x[Cambodia-(29)]
+	_ = x[Cameroon-(30)]
+	_ = x[Canada-(31)]
+	_ = x[CentralAfricanRepublic-(32)]
+	_ = x[Chad-(33)]
+	_ = x[Chile-(34)]
+	_ = x[China-(35)]
+	_ = x[Colombia-(36)]
+	_ = x[Comoros-(37)]
+	_ = x[DemocraticRepublicOfTheCongo-(38)]
+	_ = x[RepublicOfTheCongo-(39)]
+	_ = x[CostaRica-(40)]
+	_ = x[CôteDIvoire-(41)]
+	_ = x[Croatia-(42)]
+	_ = x[Cuba-(43)]
+	_ = x[Cyprus-(44)]
+	_ = x[CzechRepublic-(45)]
+	_ = x[Denmark-(46)]
+	_ = x[Djibouti-(47)]
+	_ = x[Dominica-(48)]
+	_ = x[DominicanRepublic-(49)]
+	_ = x[EastTimor-(50)]
+	_ = x[Ecuador-(51)]
+	_ = x[Egypt-(52)]
+	_ = x[ElSalvador-(53)]
+	_ = x[EquatorialGuinea-(54)]
+	_ = x[Eritrea-(55)]
+	_ = x[Estonia-(56)]
+	_ = x[Eswatini-(57)]
+	_ = x[Ethiopia-(58)]
+	_ = x[Fiji-(59)]
+	_ = x[Finland-(60)]
+	_ = x[France-(61)]
+	_ = x[Gabon-(62)]
+	_ = x[TheGambia-(63)]
+	_ = x[Georgia-(64)]
+	_ = x[Germany-(65)]
+	_ = x[Ghana-(66)]
+	_ = x[Greece-(67)]
+	_ = x[Grenada-(68)]
+	_ = x[Guatemala-(69)]
+	_ = x[Guinea-(70)]
+	_ = x[GuineaBissau-(71)]
+	_ = x[Guyana-(72)]
+	_ = x[Haiti-(73)]
+	_ = x[Honduras-(74)]
+	_ = x[Hungary-(75)]
+	_ = x[Iceland-(76)]
+	_ = x[India-(77)]
+	_ = x[Indonesia-(78)]
+	_ = x[Iran-(79)]
+	_ = x[Iraq-(80)]
+	_ = x[Ireland-(81)]
+	_ = x[Israel-(82)]
+	_ = x[Italy-(83)]
+	_ = x[Jamaica-(84)]
+	_ = x[Japan-(85)]
+	_ = x[Jordan-(86)]
+	_ = x[Kazakhstan-(87)]
+	_ = x[Kenya-(88)]
+	_ = x[Kiribati-(89)]
+	_ = x[NorthKorea-(90)]
+	_ = x[SouthKorea-(91)]
+	_ = x[Kosovo-(92)]
+	_ = x[Kuwait-(93)]
+	_ = x[Kyrgyzstan-(94)]
+	_ = x[Laos-(95)]
+	_ = x[Latvia-(96)]
+	_ = x[Lebanon-(97)]
+	_ = x[Lesotho-(98)]
+	_ = x[Liberia-(99)]
+	_ = x[Libya-(100)]
+	_ = x[Liechtenstein-(101)]
+	_ = x[Lithuania-(102)]
+	_ = x[Luxembourg-(103)]
+	_ = x[Madagascar-(104)]
+	_ = x[Malawi-(105)]
+	_ = x[Malaysia-(106)]
+	_ = x[Maldives-(107)]
+	_ = x[Mali-(108)]
+	_ = x[Malta-(109)]
+	_ = x[MarshallIslands-(110)]
+	_ = x[Mauritania-(111)]
+	_ = x[Mauritius-(112)]
+	_ = x[Mexico-(113)]
+	_ = x[FederatedStatesOfMicronesia-(114)]
+	_ = x[Moldova-(115)]
+	_ = x[Monaco-(116)]
+	_ = x[Mongolia-(117)]
+	_ = x[Montenegro-(118)]
+	_ = x[Morocco-(119)]
+	_ = x[Mozambique-(120)]
+	_ = x[Myanmar-(121)]
+	_ = x[Namibia-(122)]
+	_ = x[Nauru-(123)]
+	_ = x[Nepal-(124)]
+	_ = x[Netherlands-(125)]
+	_ = x[NewZealand-(126)]
+	_ = x[Nicaragua-(127)]
+	_ = x[Niger-(128)]
+	_ = x[Nigeria-(129)]
+	_ = x[NorthMacedonia-(130)]
+	_ = x[Norway-(131)]
+	_ = x[Oman-(132)]
+	_ = x[Pakistan-(133)]
+	_ = x[Palau-(134)]
+	_ = x[Panama-(135)]
+	_ = x[PapuaNewGuinea-(136)]
+	_ = x[Paraguay-(137)]
+	_ = x[Peru-(138)]
+	_ = x[Philippines-(139)]
+	_ = x[Poland-(140)]
+	_ = x[Portugal-(141)]
+	_ = x[Qatar-(142)]
+	_ = x[Romania-(143)]
+	_ = x[Russia-(144)]
+	_ = x[Rwanda-(145)]
+	_ = x[SaintKittsAndNevis-(146)]
+	_ = x[SaintLucia-(147)]
+	_ = x[SaintVincentAndTheGrenadines-(148)]
+	_ = x[Samoa-(149)]
+	_ = x[SanMarino-(150)]
+	_ = x[SaoTomeAndPrincipe-(151)]
+	_ = x[SaudiArabia-(152)]
+	_ = x[Senegal-(153)]
+	_ = x[Serbia-(154)]
+	_ = x[Seychelles-(155)]
+	_ = x[SierraLeone-(156)]
+	_ = x[Singapore-(157)]
+	_ = x[Slovakia-(158)]
+	_ = x[Slovenia-(159)]
+	_ = x[SolomonIslands-(160)]
+	_ = x[Somalia-(161)]
+	_ = x[SouthAfrica-(162)]
+	_ = x[Spain-(163)]
+	_ = x[SriLanka-(164)]
+	_ = x[Sudan-(165)]
+	_ = x[SouthSudan-(166)]
+	_ = x[Suriname-(167)]
+	_ = x[Sweden-(168)]
+	_ = x[Switzerland-(169)]
+	_ = x[Syria-(170)]
+	_ = x[Taiwan-(171)]
+	_ = x[Tajikistan-(172)]
+	_ = x[Tanzania-(173)]
+	_ = x[Thailand-(174)]
+	_ = x[Togo-(175)]
+	_ = x[Tonga-(176)]
+	_ = x[TrinidadAndTobago-(177)]
+	_ = x[Tunisia-(178)]
+	_ = x[Turkey-(179)]
+	_ = x[Turkmenistan-(180)]
+	_ = x[Tuvalu-(181)]
+	_ = x[Uganda-(182)]
+	_ = x[Ukraine-(183)]
+	_ = x[UnitedArabEmirates-(184)]
+	_ = x[UnitedKingdom-(185)]
+	_ = x[UnitedStates-(186)]
+	_ = x[Uruguay-(187)]
+	_ = x[Uzbekistan-(188)]
+	_ = x[Vanuatu-(189)]
+	_ = x[VaticanCity-(190)]
+	_ = x[Venezuela-(191)]
+	_ = x[Vietnam-(192)]
+	_ = x[Yemen-(193)]
+	_ = x[Zambia-(194)]
+	_ = x[Zimbabwe-(195)]
+}
+
+var _CountryValues = []Country{Afghanistan, Albania, Algeria, Andorra, Angola, AntiguaAndBarbuda, Argentina, Armenia, Australia, Austria, Azerbaijan, TheBahamas, Bahrain, Bangladesh, Barbados, Belarus, Belgium, Belize, Benin, Bhutan, Bolivia, BosniaAndHerzegovina, Botswana, Brazil, Brunei, Bulgaria, BurkinaFaso, Burundi, CaboVerde, Cambodia, Cameroon, Canada, CentralAfricanRepublic, Chad, Chile, China, Colombia, Comoros, DemocraticRepublicOfTheCongo, RepublicOfTheCongo, CostaRica, CôteDIvoire, Croatia, Cuba, Cyprus, CzechRepublic, Denmark, Djibouti, Dominica, DominicanRepublic, EastTimor, Ecuador, Egypt, ElSalvador, EquatorialGuinea, Eritrea, Estonia, Eswatini, Ethiopia, Fiji, Finland, France, Gabon, TheGambia, Georgia, Germany, Ghana, Greece, Grenada, Guatemala, Guinea, GuineaBissau, Guyana, Haiti, Honduras, Hungary, Iceland, India, Indonesia, Iran, Iraq, Ireland, Israel, Italy, Jamaica, Japan, Jordan, Kazakhstan, Kenya, Kiribati, NorthKorea, SouthKorea, Kosovo, Kuwait, Kyrgyzstan, Laos, Latvia, Lebanon, Lesotho, Liberia, Libya, Liechtenstein, Lithuania, Luxembourg, Madagascar, Malawi, Malaysia, Maldives, Mali, Malta, MarshallIslands, Mauritania, Mauritius, Mexico, FederatedStatesOfMicronesia, Moldova, Monaco, Mongolia, Montenegro, Morocco, Mozambique, Myanmar, Namibia, Nauru, Nepal, Netherlands, NewZealand, Nicaragua, Niger, Nigeria, NorthMacedonia, Norway, Oman, Pakistan, Palau, Panama, PapuaNewGuinea, Paraguay, Peru, Philippines, Poland, Portugal, Qatar, Romania, Russia, Rwanda, SaintKittsAndNevis, SaintLucia, SaintVincentAndTheGrenadines, Samoa, SanMarino, SaoTomeAndPrincipe, SaudiArabia, Senegal, Serbia, Seychelles, SierraLeone, Singapore, Slovakia, Slovenia, SolomonIslands, Somalia, SouthAfrica, Spain, SriLanka, Sudan, SouthSudan, Suriname, Sweden, Switzerland, Syria, Taiwan, Tajikistan, Tanzania, Thailand, Togo, Tonga, TrinidadAndTobago, Tunisia, Turkey, Turkmenistan, Tuvalu, Uganda, Ukraine, UnitedArabEmirates, UnitedKingdom, UnitedStates, Uruguay, Uzbekistan, Vanuatu, VaticanCity, Venezuela, Vietnam, Yemen, Zambia, Zimbabwe}
+
+var _CountryNameToValueMap = map[string]Country{
+	_CountryName[0:11]:           Afghanistan,
+	_CountryLowerName[0:11]:      Afghanistan,
+	_CountryName[11:18]:          Albania,
+	_CountryLowerName[11:18]:     Albania,
+	_CountryName[18:25]:          Algeria,
+	_CountryLowerName[18:25]:     Algeria,
+	_CountryName[25:32]:          Andorra,
+	_CountryLowerName[25:32]:     Andorra,
+	_CountryName[32:38]:          Angola,
+	_CountryLowerName[32:38]:     Angola,
+	_CountryName[38:55]:          AntiguaAndBarbuda,
+	_CountryLowerName[38:55]:     AntiguaAndBarbuda,
+	_CountryName[55:64]:          Argentina,
+	_CountryLowerName[55:64]:     Argentina,
+	_CountryName[64:71]:          Armenia,
+	_CountryLowerName[64:71]:     Armenia,
+	_CountryName[71:80]:          Australia,
+	_CountryLowerName[71:80]:     Australia,
+	_CountryName[80:87]:          Austria,
+	_CountryLowerName[80:87]:     Austria,
+	_CountryName[87:97]:          Azerbaijan,
+	_CountryLowerName[87:97]:     Azerbaijan,
+	_CountryName[97:107]:         TheBahamas,
+	_CountryLowerName[97:107]:    TheBahamas,
+	_CountryName[107:114]:        Bahrain,
+	_CountryLowerName[107:114]:   Bahrain,
+	_CountryName[114:124]:        Bangladesh,
+	_CountryLowerName[114:124]:   Bangladesh,
+	_CountryName[124:132]:        Barbados,
+	_CountryLowerName[124:132]:   Barbados,
+	_CountryName[132:139]:        Belarus,
+	_CountryLowerName[132:139]:   Belarus,
+	_CountryName[139:146]:        Belgium,
+	_CountryLowerName[139:146]:   Belgium,
+	_CountryName[146:152]:        Belize,
+	_CountryLowerName[146:152]:   Belize,
+	_CountryName[152:157]:        Benin,
+	_CountryLowerName[152:157]:   Benin,
+	_CountryName[157:163]:        Bhutan,
+	_CountryLowerName[157:163]:   Bhutan,
+	_CountryName[163:170]:        Bolivia,
+	_CountryLowerName[163:170]:   Bolivia,
+	_CountryName[170:190]:        BosniaAndHerzegovina,
+	_CountryLowerName[170:190]:   BosniaAndHerzegovina,
+	_CountryName[190:198]:        Botswana,
+	_CountryLowerName[190:198]:   Botswana,
+	_CountryName[198:204]:        Brazil,
+	_CountryLowerName[198:204]:   Brazil,
+	_CountryName[204:210]:        Brunei,
+	_CountryLowerName[204:210]:   Brunei,
+	_CountryName[210:218]:        Bulgaria,
+	_CountryLowerName[210:218]:   Bulgaria,
+	_CountryName[218:229]:        BurkinaFaso,
+	_CountryLowerName[218:229]:   BurkinaFaso,
+	_CountryName[229:236]:        Burundi,
+	_CountryLowerName[229:236]:   Burundi,
+	_CountryName[236:245]:        CaboVerde,
+	_CountryLowerName[236:245]:   CaboVerde,
+	_CountryName[245:253]:        Cambodia,
+	_CountryLowerName[245:253]:   Cambodia,
+	_CountryName[253:261]:        Cameroon,
+	_CountryLowerName[253:261]:   Cameroon,
+	_CountryName[261:267]:        Canada,
+	_CountryLowerName[261:267]:   Canada,
+	_CountryName[267:289]:        CentralAfricanRepublic,
+	_CountryLowerName[267:289]:   CentralAfricanRepublic,
+	_CountryName[289:293]:        Chad,
+	_CountryLowerName[289:293]:   Chad,
+	_CountryName[293:298]:        Chile,
+	_CountryLowerName[293:298]:   Chile,
+	_CountryName[298:303]:        China,
+	_CountryLowerName[298:303]:   China,
+	_CountryName[303:311]:        Colombia,
+	_CountryLowerName[303:311]:   Colombia,
+	_CountryName[311:318]:        Comoros,
+	_CountryLowerName[311:318]:   Comoros,
+	_CountryName[318:346]:        DemocraticRepublicOfTheCongo,
+	_CountryLowerName[318:346]:   DemocraticRepublicOfTheCongo,
+	_CountryName[346:364]:        RepublicOfTheCongo,
+	_CountryLowerName[346:364]:   RepublicOfTheCongo,
+	_CountryName[364:373]:        CostaRica,
+	_CountryLowerName[364:373]:   CostaRica,
+	_CountryName[373:385]:        CôteDIvoire,
+	_CountryLowerName[373:385]:   CôteDIvoire,
+	_CountryName[385:392]:        Croatia,
+	_CountryLowerName[385:392]:   Croatia,
+	_CountryName[392:396]:        Cuba,
+	_CountryLowerName[392:396]:   Cuba,
+	_CountryName[396:402]:        Cyprus,
+	_CountryLowerName[396:402]:   Cyprus,
+	_CountryName[402:415]:        CzechRepublic,
+	_CountryLowerName[402:415]:   CzechRepublic,
+	_CountryName[415:422]:        Denmark,
+	_CountryLowerName[415:422]:   Denmark,
+	_CountryName[422:430]:        Djibouti,
+	_CountryLowerName[422:430]:   Djibouti,
+	_CountryName[430:438]:        Dominica,
+	_CountryLowerName[430:438]:   Dominica,
+	_CountryName[438:455]:        DominicanRepublic,
+	_CountryLowerName[438:455]:   DominicanRepublic,
+	_CountryName[455:464]:        EastTimor,
+	_CountryLowerName[455:464]:   EastTimor,
+	_CountryName[464:471]:        Ecuador,
+	_CountryLowerName[464:471]:   Ecuador,
+	_CountryName[471:476]:        Egypt,
+	_CountryLowerName[471:476]:   Egypt,
+	_CountryName[476:486]:        ElSalvador,
+	_CountryLowerName[476:486]:   ElSalvador,
+	_CountryName[486:502]:        EquatorialGuinea,
+	_CountryLowerName[486:502]:   EquatorialGuinea,
+	_CountryName[502:509]:        Eritrea,
+	_CountryLowerName[502:509]:   Eritrea,
+	_CountryName[509:516]:        Estonia,
+	_CountryLowerName[509:516]:   Estonia,
+	_CountryName[516:524]:        Eswatini,
+	_CountryLowerName[516:524]:   Eswatini,
+	_CountryName[524:532]:        Ethiopia,
+	_CountryLowerName[524:532]:   Ethiopia,
+	_CountryName[532:536]:        Fiji,
+	_CountryLowerName[532:536]:   Fiji,
+	_CountryName[536:543]:        Finland,
+	_CountryLowerName[536:543]:   Finland,
+	_CountryName[543:549]:        France,
+	_CountryLowerName[543:549]:   France,
+	_CountryName[549:554]:        Gabon,
+	_CountryLowerName[549:554]:   Gabon,
+	_CountryName[554:563]:        TheGambia,
+	_CountryLowerName[554:563]:   TheGambia,
+	_CountryName[563:570]:        Georgia,
+	_CountryLowerName[563:570]:   Georgia,
+	_CountryName[570:577]:        Germany,
+	_CountryLowerName[570:577]:   Germany,
+	_CountryName[577:582]:        Ghana,
+	_CountryLowerName[577:582]:   Ghana,
+	_CountryName[582:588]:        Greece,
+	_CountryLowerName[582:588]:   Greece,
+	_CountryName[588:595]:        Grenada,
+	_CountryLowerName[588:595]:   Grenada,
+	_CountryName[595:604]:        Guatemala,
+	_CountryLowerName[595:604]:   Guatemala,
+	_CountryName[604:610]:        Guinea,
+	_CountryLowerName[604:610]:   Guinea,
+	_CountryName[610:622]:        GuineaBissau,
+	_CountryLowerName[610:622]:   GuineaBissau,
+	_CountryName[622:628]:        Guyana,
+	_CountryLowerName[622:628]:   Guyana,
+	_CountryName[628:633]:        Haiti,
+	_CountryLowerName[628:633]:   Haiti,
+	_CountryName[633:641]:        Honduras,
+	_CountryLowerName[633:641]:   Honduras,
+	_CountryName[641:648]:        Hungary,
+	_CountryLowerName[641:648]:   Hungary,
+	_CountryName[648:655]:        Iceland,
+	_CountryLowerName[648:655]:   Iceland,
+	_CountryName[655:660]:        India,
+	_CountryLowerName[655:660]:   India,
+	_CountryName[660:669]:        Indonesia,
+	_CountryLowerName[660:669]:   Indonesia,
+	_CountryName[669:673]:        Iran,
+	_CountryLowerName[669:673]:   Iran,
+	_CountryName[673:677]:        Iraq,
+	_CountryLowerName[673:677]:   Iraq,
+	_CountryName[677:684]:        Ireland,
+	_CountryLowerName[677:684]:   Ireland,
+	_CountryName[684:690]:        Israel,
+	_CountryLowerName[684:690]:   Israel,
+	_CountryName[690:695]:        Italy,
+	_CountryLowerName[690:695]:   Italy,
+	_CountryName[695:702]:        Jamaica,
+	_CountryLowerName[695:702]:   Jamaica,
+	_CountryName[702:707]:        Japan,
+	_CountryLowerName[702:707]:   Japan,
+	_CountryName[707:713]:        Jordan,
+	_CountryLowerName[707:713]:   Jordan,
+	_CountryName[713:723]:        Kazakhstan,
+	_CountryLowerName[713:723]:   Kazakhstan,
+	_CountryName[723:728]:        Kenya,
+	_CountryLowerName[723:728]:   Kenya,
+	_CountryName[728:736]:        Kiribati,
+	_CountryLowerName[728:736]:   Kiribati,
+	_CountryName[736:746]:        NorthKorea,
+	_CountryLowerName[736:746]:   NorthKorea,
+	_CountryName[746:756]:        SouthKorea,
+	_CountryLowerName[746:756]:   SouthKorea,
+	_CountryName[756:762]:        Kosovo,
+	_CountryLowerName[756:762]:   Kosovo,
+	_CountryName[762:768]:        Kuwait,
+	_CountryLowerName[762:768]:   Kuwait,
+	_CountryName[768:778]:        Kyrgyzstan,
+	_CountryLowerName[768:778]:   Kyrgyzstan,
+	_CountryName[778:782]:        Laos,
+	_CountryLowerName[778:782]:   Laos,
+	_CountryName[782:788]:        Latvia,
+	_CountryLowerName[782:788]:   Latvia,
+	_CountryName[788:795]:        Lebanon,
+	_CountryLowerName[788:795]:   Lebanon,
+	_CountryName[795:802]:        Lesotho,
+	_CountryLowerName[795:802]:   Lesotho,
+	_CountryName[802:809]:        Liberia,
+	_CountryLowerName[802:809]:   Liberia,
+	_CountryName[809:814]:        Libya,
+	_CountryLowerName[809:814]:   Libya,
+	_CountryName[814:827]:        Liechtenstein,
+	_CountryLowerName[814:827]:   Liechtenstein,
+	_CountryName[827:836]:        Lithuania,
+	_CountryLowerName[827:836]:   Lithuania,
+	_CountryName[836:846]:        Luxembourg,
+	_CountryLowerName[836:846]:   Luxembourg,
+	_CountryName[846:856]:        Madagascar,
+	_CountryLowerName[846:856]:   Madagascar,
+	_CountryName[856:862]:        Malawi,
+	_CountryLowerName[856:862]:   Malawi,
+	_CountryName[862:870]:        Malaysia,
+	_CountryLowerName[862:870]:   Malaysia,
+	_CountryName[870:878]:        Maldives,
+	_CountryLowerName[870:878]:   Maldives,
+	_CountryName[878:882]:        Mali,
+	_CountryLowerName[878:882]:   Mali,
+	_CountryName[882:887]:        Malta,
+	_CountryLowerName[882:887]:   Malta,
+	_CountryName[887:902]:        MarshallIslands,
+	_CountryLowerName[887:902]:   MarshallIslands,
+	_CountryName[902:912]:        Mauritania,
+	_CountryLowerName[902:912]:   Mauritania,
+	_CountryName[912:921]:        Mauritius,
+	_CountryLowerName[912:921]:   Mauritius,
+	_CountryName[921:927]:        Mexico,
+	_CountryLowerName[921:927]:   Mexico,
+	_CountryName[927:954]:        FederatedStatesOfMicronesia,
+	_CountryLowerName[927:954]:   FederatedStatesOfMicronesia,
+	_CountryName[954:961]:        Moldova,
+	_CountryLowerName[954:961]:   Moldova,
+	_CountryName[961:967]:        Monaco,
+	_CountryLowerName[961:967]:   Monaco,
+	_CountryName[967:975]:        Mongolia,
+	_CountryLowerName[967:975]:   Mongolia,
+	_CountryName[975:985]:        Montenegro,
+	_CountryLowerName[975:985]:   Montenegro,
+	_CountryName[985:992]:        Morocco,
+	_CountryLowerName[985:992]:   Morocco,
+	_CountryName[992:1002]:       Mozambique,
+	_CountryLowerName[992:1002]:  Mozambique,
+	_CountryName[1002:1009]:      Myanmar,
+	_CountryLowerName[1002:1009]: Myanmar,
+	_CountryName[1009:1016]:      Namibia,
+	_CountryLowerName[1009:1016]: Namibia,
+	_CountryName[1016:1021]:      Nauru,
+	_CountryLowerName[1016:1021]: Nauru,
+	_CountryName[1021:1026]:      Nepal,
+	_CountryLowerName[1021:1026]: Nepal,
+	_CountryName[1026:1037]:      Netherlands,
+	_CountryLowerName[1026:1037]: Netherlands,
+	_CountryName[1037:1047]:      NewZealand,
+	_CountryLowerName[1037:1047]: NewZealand,
+	_CountryName[1047:1056]:      Nicaragua,
+	_CountryLowerName[1047:1056]: Nicaragua,
+	_CountryName[1056:1061]:      Niger,
+	_CountryLowerName[1056:1061]: Niger,
+	_CountryName[1061:1068]:      Nigeria,
+	_CountryLowerName[1061:1068]: Nigeria,
+	_CountryName[1068:1082]:      NorthMacedonia,
+	_CountryLowerName[1068:1082]: NorthMacedonia,
+	_CountryName[1082:1088]:      Norway,
+	_CountryLowerName[1082:1088]: Norway,
+	_CountryName[1088:1092]:      Oman,
+	_CountryLowerName[1088:1092]: Oman,
+	_CountryName[1092:1100]:      Pakistan,
+	_CountryLowerName[1092:1100]: Pakistan,
+	_CountryName[1100:1105]:      Palau,
+	_CountryLowerName[1100:1105]: Palau,
+	_CountryName[1105:1111]:      Panama,
+	_CountryLowerName[1105:1111]: Panama,
+	_CountryName[1111:1125]:      PapuaNewGuinea,
+	_CountryLowerName[1111:1125]: PapuaNewGuinea,
+	_CountryName[1125:1133]:      Paraguay,
+	_CountryLowerName[1125:1133]: Paraguay,
+	_CountryName[1133:1137]:      Peru,
+	_CountryLowerName[1133:1137]: Peru,
+	_CountryName[1137:1148]:      Philippines,
+	_CountryLowerName[1137:1148]: Philippines,
+	_CountryName[1148:1154]:      Poland,
+	_CountryLowerName[1148:1154]: Poland,
+	_CountryName[1154:1162]:      Portugal,
+	_CountryLowerName[1154:1162]: Portugal,
+	_CountryName[1162:1167]:      Qatar,
+	_CountryLowerName[1162:1167]: Qatar,
+	_CountryName[1167:1174]:      Romania,
+	_CountryLowerName[1167:1174]: Romania,
+	_CountryName[1174:1180]:      Russia,
+	_CountryLowerName[1174:1180]: Russia,
+	_CountryName[1180:1186]:      Rwanda,
+	_CountryLowerName[1180:1186]: Rwanda,
+	_CountryName[1186:1204]:      SaintKittsAndNevis,
+	_CountryLowerName[1186:1204]: SaintKittsAndNevis,
+	_CountryName[1204:1214]:      SaintLucia,
+	_CountryLowerName[1204:1214]: SaintLucia,
+	_CountryName[1214:1242]:      SaintVincentAndTheGrenadines,
+	_CountryLowerName[1214:1242]: SaintVincentAndTheGrenadines,
+	_CountryName[1242:1247]:      Samoa,
+	_CountryLowerName[1242:1247]: Samoa,
+	_CountryName[1247:1256]:      SanMarino,
+	_CountryLowerName[1247:1256]: SanMarino,
+	_CountryName[1256:1274]:      SaoTomeAndPrincipe,
+	_CountryLowerName[1256:1274]: SaoTomeAndPrincipe,
+	_CountryName[1274:1285]:      SaudiArabia,
+	_CountryLowerName[1274:1285]: SaudiArabia,
+	_CountryName[1285:1292]:      Senegal,
+	_CountryLowerName[1285:1292]: Senegal,
+	_CountryName[1292:1298]:      Serbia,
+	_CountryLowerName[1292:1298]: Serbia,
+	_CountryName[1298:1308]:      Seychelles,
+	_CountryLowerName[1298:1308]: Seychelles,
+	_CountryName[1308:1319]:      SierraLeone,
+	_CountryLowerName[1308:1319]: SierraLeone,
+	_CountryName[1319:1328]:      Singapore,
+	_CountryLowerName[1319:1328]: Singapore,
+	_CountryName[1328:1336]:      Slovakia,
+	_CountryLowerName[1328:1336]: Slovakia,
+	_CountryName[1336:1344]:      Slovenia,
+	_CountryLowerName[1336:1344]: Slovenia,
+	_CountryName[1344:1358]:      SolomonIslands,
+	_CountryLowerName[1344:1358]: SolomonIslands,
+	_CountryName[1358:1365]:      Somalia,
+	_CountryLowerName[1358:1365]: Somalia,
+	_CountryName[1365:1376]:      SouthAfrica,
+	_CountryLowerName[1365:1376]: SouthAfrica,
+	_CountryName[1376:1381]:      Spain,
+	_CountryLowerName[1376:1381]: Spain,
+	_CountryName[1381:1389]:      SriLanka,
+	_CountryLowerName[1381:1389]: SriLanka,
+	_CountryName[1389:1394]:      Sudan,
+	_CountryLowerName[1389:1394]: Sudan,
+	_CountryName[1394:1404]:      SouthSudan,
+	_CountryLowerName[1394:1404]: SouthSudan,
+	_CountryName[1404:1412]:      Suriname,
+	_CountryLowerName[1404:1412]: Suriname,
+	_CountryName[1412:1418]:      Sweden,
+	_CountryLowerName[1412:1418]: Sweden,
+	_CountryName[1418:1429]:      Switzerland,
+	_CountryLowerName[1418:1429]: Switzerland,
+	_CountryName[1429:1434]:      Syria,
+	_CountryLowerName[1429:1434]: Syria,
+	_CountryName[1434:1440]:      Taiwan,
+	_CountryLowerName[1434:1440]: Taiwan,
+	_CountryName[1440:1450]:      Tajikistan,
+	_CountryLowerName[1440:1450]: Tajikistan,
+	_CountryName[1450:1458]:      Tanzania,
+	_CountryLowerName[1450:1458]: Tanzania,
+	_CountryName[1458:1466]:      Thailand,
+	_CountryLowerName[1458:1466]: Thailand,
+	_CountryName[1466:1470]:      Togo,
+	_CountryLowerName[1466:1470]: Togo,
+	_CountryName[1470:1475]:      Tonga,
+	_CountryLowerName[1470:1475]: Tonga,
+	_CountryName[1475:1492]:      TrinidadAndTobago,
+	_CountryLowerName[1475:1492]: TrinidadAndTobago,
+	_CountryName[1492:1499]:      Tunisia,
+	_CountryLowerName[1492:1499]: Tunisia,
+	_CountryName[1499:1505]:      Turkey,
+	_CountryLowerName[1499:1505]: Turkey,
+	_CountryName[1505:1517]:      Turkmenistan,
+	_CountryLowerName[1505:1517]: Turkmenistan,
+	_CountryName[1517:1523]:      Tuvalu,
+	_CountryLowerName[1517:1523]: Tuvalu,
+	_CountryName[1523:1529]:      Uganda,
+	_CountryLowerName[1523:1529]: Uganda,
+	_CountryName[1529:1536]:      Ukraine,
+	_CountryLowerName[1529:1536]: Ukraine,
+	_CountryName[1536:1554]:      UnitedArabEmirates,
+	_CountryLowerName[1536:1554]: UnitedArabEmirates,
+	_CountryName[1554:1567]:      UnitedKingdom,
+	_CountryLowerName[1554:1567]: UnitedKingdom,
+	_CountryName[1567:1579]:      UnitedStates,
+	_CountryLowerName[1567:1579]: UnitedStates,
+	_CountryName[1579:1586]:      Uruguay,
+	_CountryLowerName[1579:1586]: Uruguay,
+	_CountryName[1586:1596]:      Uzbekistan,
+	_CountryLowerName[1586:1596]: Uzbekistan,
+	_CountryName[1596:1603]:      Vanuatu,
+	_CountryLowerName[1596:1603]: Vanuatu,
+	_CountryName[1603:1614]:      VaticanCity,
+	_CountryLowerName[1603:1614]: VaticanCity,
+	_CountryName[1614:1623]:      Venezuela,
+	_CountryLowerName[1614:1623]: Venezuela,
+	_CountryName[1623:1630]:      Vietnam,
+	_CountryLowerName[1623:1630]: Vietnam,
+	_CountryName[1630:1635]:      Yemen,
+	_CountryLowerName[1630:1635]: Yemen,
+	_CountryName[1635:1641]:      Zambia,
+	_CountryLowerName[1635:1641]: Zambia,
+	_CountryName[1641:1649]:      Zimbabwe,
+	_CountryLowerName[1641:1649]: Zimbabwe,
+}
+
+var _CountryNames = []string{
+	_CountryName[0:11],
+	_CountryName[11:18],
+	_CountryName[18:25],
+	_CountryName[25:32],
+	_CountryName[32:38],
+	_CountryName[38:55],
+	_CountryName[55:64],
+	_CountryName[64:71],
+	_CountryName[71:80],
+	_CountryName[80:87],
+	_CountryName[87:97],
+	_CountryName[97:107],
+	_CountryName[107:114],
+	_CountryName[114:124],
+	_CountryName[124:132],
+	_CountryName[132:139],
+	_CountryName[139:146],
+	_CountryName[146:152],
+	_CountryName[152:157],
+	_CountryName[157:163],
+	_CountryName[163:170],
+	_CountryName[170:190],
+	_CountryName[190:198],
+	_CountryName[198:204],
+	_CountryName[204:210],
+	_CountryName[210:218],
+	_CountryName[218:229],
+	_CountryName[229:236],
+	_CountryName[236:245],
+	_CountryName[245:253],
+	_CountryName[253:261],
+	_CountryName[261:267],
+	_CountryName[267:289],
+	_CountryName[289:293],
+	_CountryName[293:298],
+	_CountryName[298:303],
+	_CountryName[303:311],
+	_CountryName[311:318],
+	_CountryName[318:346],
+	_CountryName[346:364],
+	_CountryName[364:373],
+	_CountryName[373:385],
+	_CountryName[385:392],
+	_CountryName[392:396],
+	_CountryName[396:402],
+	_CountryName[402:415],
+	_CountryName[415:422],
+	_CountryName[422:430],
+	_CountryName[430:438],
+	_CountryName[438:455],
+	_CountryName[455:464],
+	_CountryName[464:471],
+	_CountryName[471:476],
+	_CountryName[476:486],
+	_CountryName[486:502],
+	_CountryName[502:509],
+	_CountryName[509:516],
+	_CountryName[516:524],
+	_CountryName[524:532],
+	_CountryName[532:536],
+	_CountryName[536:543],
+	_CountryName[543:549],
+	_CountryName[549:554],
+	_CountryName[554:563],
+	_CountryName[563:570],
+	_CountryName[570:577],
+	_CountryName[577:582],
+	_CountryName[582:588],
+	_CountryName[588:595],
+	_CountryName[595:604],
+	_CountryName[604:610],
+	_CountryName[610:622],
+	_CountryName[622:628],
+	_CountryName[628:633],
+	_CountryName[633:641],
+	_CountryName[641:648],
+	_CountryName[648:655],
+	_CountryName[655:660],
+	_CountryName[660:669],
+	_CountryName[669:673],
+	_CountryName[673:677],
+	_CountryName[677:684],
+	_CountryName[684:690],
+	_CountryName[690:695],
+	_CountryName[695:702],
+	_CountryName[702:707],
+	_CountryName[707:713],
+	_CountryName[713:723],
+	_CountryName[723:728],
+	_CountryName[728:736],
+	_CountryName[736:746],
+	_CountryName[746:756],
+	_CountryName[756:762],
+	_CountryName[762:768],
+	_CountryName[768:778],
+	_CountryName[778:782],
+	_CountryName[782:788],
+	_CountryName[788:795],
+	_CountryName[795:802],
+	_CountryName[802:809],
+	_CountryName[809:814],
+	_CountryName[814:827],
+	_CountryName[827:836],
+	_CountryName[836:846],
+	_CountryName[846:856],
+	_CountryName[856:862],
+	_CountryName[862:870],
+	_CountryName[870:878],
+	_CountryName[878:882],
+	_CountryName[882:887],
+	_CountryName[887:902],
+	_CountryName[902:912],
+	_CountryName[912:921],
+	_CountryName[921:927],
+	_CountryName[927:954],
+	_CountryName[954:961],
+	_CountryName[961:967],
+	_CountryName[967:975],
+	_CountryName[975:985],
+	_CountryName[985:992],
+	_CountryName[992:1002],
+	_CountryName[1002:1009],
+	_CountryName[1009:1016],
+	_CountryName[1016:1021],
+	_CountryName[1021:1026],
+	_CountryName[1026:1037],
+	_CountryName[1037:1047],
+	_CountryName[1047:1056],
+	_CountryName[1056:1061],
+	_CountryName[1061:1068],
+	_CountryName[1068:1082],
+	_CountryName[1082:1088],
+	_CountryName[1088:1092],
+	_CountryName[1092:1100],
+	_CountryName[1100:1105],
+	_CountryName[1105:1111],
+	_CountryName[1111:1125],
+	_CountryName[1125:1133],
+	_CountryName[1133:1137],
+	_CountryName[1137:1148],
+	_CountryName[1148:1154],
+	_CountryName[1154:1162],
+	_CountryName[1162:1167],
+	_CountryName[1167:1174],
+	_CountryName[1174:1180],
+	_CountryName[1180:1186],
+	_CountryName[1186:1204],
+	_CountryName[1204:1214],
+	_CountryName[1214:1242],
+	_CountryName[1242:1247],
+	_CountryName[1247:1256],
+	_CountryName[1256:1274],
+	_CountryName[1274:1285],
+	_CountryName[1285:1292],
+	_CountryName[1292:1298],
+	_CountryName[1298:1308],
+	_CountryName[1308:1319],
+	_CountryName[1319:1328],
+	_CountryName[1328:1336],
+	_CountryName[1336:1344],
+	_CountryName[1344:1358],
+	_CountryName[1358:1365],
+	_CountryName[1365:1376],
+	_CountryName[1376:1381],
+	_CountryName[1381:1389],
+	_CountryName[1389:1394],
+	_CountryName[1394:1404],
+	_CountryName[1404:1412],
+	_CountryName[1412:1418],
+	_CountryName[1418:1429],
+	_CountryName[1429:1434],
+	_CountryName[1434:1440],
+	_CountryName[1440:1450],
+	_CountryName[1450:1458],
+	_CountryName[1458:1466],
+	_CountryName[1466:1470],
+	_CountryName[1470:1475],
+	_CountryName[1475:1492],
+	_CountryName[1492:1499],
+	_CountryName[1499:1505],
+	_CountryName[1505:1517],
+	_CountryName[1517:1523],
+	_CountryName[1523:1529],
+	_CountryName[1529:1536],
+	_CountryName[1536:1554],
+	_CountryName[1554:1567],
+	_CountryName[1567:1579],
+	_CountryName[1579:1586],
+	_CountryName[1586:1596],
+	_CountryName[1596:1603],
+	_CountryName[1603:1614],
+	_CountryName[1614:1623],
+	_CountryName[1623:1630],
+	_CountryName[1630:1635],
+	_CountryName[1635:1641],
+	_CountryName[1641:1649],
+}
+
+// CountryString retrieves an enum value from the enum constants string name.
+// Throws an error if the param is not part of the enum.
+func CountryString(s string) (Country, error) {
+	if val, ok := _CountryNameToValueMap[s]; ok {
+		return val, nil
+	}
+	return 0, fmt.Errorf("%s does not belong to Country values", s)
+}
+
+// CountryValues returns all values of the enum
+func CountryValues() []Country {
+	return _CountryValues
+}
+
+// CountryStrings returns a slice of all String values of the enum
+func CountryStrings() []string {
+	strs := make([]string, len(_CountryNames))
+	copy(strs, _CountryNames)
+	return strs
+}
+
+// IsACountry returns "true" if the value is listed in the enum definition. "false" otherwise
+func (i Country) IsACountry() bool {
+	for _, v := range _CountryValues {
+		if i == v {
+			return true
+		}
+	}
+	return false
+}
+
+// this is necessary because of import "math/bits"
+var _ = bits.TrailingZeros(0)
+
+// CountrySet is a combination of Country values
+type CountrySet struct{ *big.Int }
+
+func (i CountrySet) String() string {
+	elements := i.Elements()
+	elementStrings := make([]string, len(elements))
+	for idx, e := range elements {
+		elementStrings[idx] = e.String()
+	}
+	return strings.Join(elementStrings, ",")
+}
+
+func (i CountrySet) Elements() []Country {
+	values := CountryValues()
+	elements := make([]Country, 0, i.BitLen()-int(i.TrailingZeroBits()))
+	for idx := 0; idx < i.BitLen(); idx++ {
+		if i.Bit(idx) == 1 {
+			elements = append(elements, values[idx])
+		}
+	}
+	return elements
+}
+
+// Test returns true if all Country values in mask are set, false otherwise.
+func (i CountrySet) Test(mask CountrySet) bool {
+	return mask.IsACountrySet() && big.NewInt(0).And(i.Int, mask.Int).Cmp(mask.Int) == 0
+}
+
+// CountrySetString retrieves an enum set value from the "," delimited list of Country constant string names.
+// Ignores elements in the list which are not part of the Country enum.
+func CountrySetString(s string) (CountrySet, error) {
+	i := CountrySet{big.NewInt(0)}
+	for _, s := range strings.Split(s, ",") {
+		v, err := CountryString(s)
+		if err != nil {
+			continue
+		}
+		flag, ok := _CountryToFlagMap[v]
+		if !ok { // this should not happen if the generator is correct
+			continue
+		}
+		i.Or(i.Int, flag.Int)
+	}
+	return i, nil
+}
+
+var _CountrySetBitmask = big.NewInt(0).Sub(big.NewInt(0).SetBit(big.NewInt(0), 196+1, 1), big.NewInt(1))
+
+// IsACountrySet returns "true" if the value is a set of values listed in the Country enum definition. "false" otherwise
+func (i CountrySet) IsACountrySet() bool {
+	return i.CmpAbs(_CountrySetBitmask) <= 0
+}
+
+// CountrySet flags
+var (
+	CountrySetAfghanistan                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 0, 1)}
+	CountrySetAlbania                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 1, 1)}
+	CountrySetAlgeria                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 2, 1)}
+	CountrySetAndorra                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 3, 1)}
+	CountrySetAngola                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 4, 1)}
+	CountrySetAntiguaAndBarbuda            = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 5, 1)}
+	CountrySetArgentina                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 6, 1)}
+	CountrySetArmenia                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 7, 1)}
+	CountrySetAustralia                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 8, 1)}
+	CountrySetAustria                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 9, 1)}
+	CountrySetAzerbaijan                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 10, 1)}
+	CountrySetTheBahamas                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 11, 1)}
+	CountrySetBahrain                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 12, 1)}
+	CountrySetBangladesh                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 13, 1)}
+	CountrySetBarbados                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 14, 1)}
+	CountrySetBelarus                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 15, 1)}
+	CountrySetBelgium                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 16, 1)}
+	CountrySetBelize                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 17, 1)}
+	CountrySetBenin                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 18, 1)}
+	CountrySetBhutan                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 19, 1)}
+	CountrySetBolivia                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 20, 1)}
+	CountrySetBosniaAndHerzegovina         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 21, 1)}
+	CountrySetBotswana                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 22, 1)}
+	CountrySetBrazil                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 23, 1)}
+	CountrySetBrunei                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 24, 1)}
+	CountrySetBulgaria                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 25, 1)}
+	CountrySetBurkinaFaso                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 26, 1)}
+	CountrySetBurundi                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 27, 1)}
+	CountrySetCaboVerde                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 28, 1)}
+	CountrySetCambodia                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 29, 1)}
+	CountrySetCameroon                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 30, 1)}
+	CountrySetCanada                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 31, 1)}
+	CountrySetCentralAfricanRepublic       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 32, 1)}
+	CountrySetChad                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 33, 1)}
+	CountrySetChile                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 34, 1)}
+	CountrySetChina                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 35, 1)}
+	CountrySetColombia                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 36, 1)}
+	CountrySetComoros                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 37, 1)}
+	CountrySetDemocraticRepublicOfTheCongo = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 38, 1)}
+	CountrySetRepublicOfTheCongo           = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 39, 1)}
+	CountrySetCostaRica                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 40, 1)}
+	CountrySetCôteDIvoire                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 41, 1)}
+	CountrySetCroatia                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 42, 1)}
+	CountrySetCuba                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 43, 1)}
+	CountrySetCyprus                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 44, 1)}
+	CountrySetCzechRepublic                = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 45, 1)}
+	CountrySetDenmark                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 46, 1)}
+	CountrySetDjibouti                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 47, 1)}
+	CountrySetDominica                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 48, 1)}
+	CountrySetDominicanRepublic            = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 49, 1)}
+	CountrySetEastTimor                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 50, 1)}
+	CountrySetEcuador                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 51, 1)}
+	CountrySetEgypt                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 52, 1)}
+	CountrySetElSalvador                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 53, 1)}
+	CountrySetEquatorialGuinea             = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 54, 1)}
+	CountrySetEritrea                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 55, 1)}
+	CountrySetEstonia                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 56, 1)}
+	CountrySetEswatini                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 57, 1)}
+	CountrySetEthiopia                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 58, 1)}
+	CountrySetFiji                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 59, 1)}
+	CountrySetFinland                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 60, 1)}
+	CountrySetFrance                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 61, 1)}
+	CountrySetGabon                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 62, 1)}
+	CountrySetTheGambia                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 63, 1)}
+	CountrySetGeorgia                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 64, 1)}
+	CountrySetGermany                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 65, 1)}
+	CountrySetGhana                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 66, 1)}
+	CountrySetGreece                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 67, 1)}
+	CountrySetGrenada                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 68, 1)}
+	CountrySetGuatemala                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 69, 1)}
+	CountrySetGuinea                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 70, 1)}
+	CountrySetGuineaBissau                 = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 71, 1)}
+	CountrySetGuyana                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 72, 1)}
+	CountrySetHaiti                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 73, 1)}
+	CountrySetHonduras                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 74, 1)}
+	CountrySetHungary                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 75, 1)}
+	CountrySetIceland                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 76, 1)}
+	CountrySetIndia                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 77, 1)}
+	CountrySetIndonesia                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 78, 1)}
+	CountrySetIran                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 79, 1)}
+	CountrySetIraq                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 80, 1)}
+	CountrySetIreland                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 81, 1)}
+	CountrySetIsrael                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 82, 1)}
+	CountrySetItaly                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 83, 1)}
+	CountrySetJamaica                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 84, 1)}
+	CountrySetJapan                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 85, 1)}
+	CountrySetJordan                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 86, 1)}
+	CountrySetKazakhstan                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 87, 1)}
+	CountrySetKenya                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 88, 1)}
+	CountrySetKiribati                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 89, 1)}
+	CountrySetNorthKorea                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 90, 1)}
+	CountrySetSouthKorea                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 91, 1)}
+	CountrySetKosovo                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 92, 1)}
+	CountrySetKuwait                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 93, 1)}
+	CountrySetKyrgyzstan                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 94, 1)}
+	CountrySetLaos                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 95, 1)}
+	CountrySetLatvia                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 96, 1)}
+	CountrySetLebanon                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 97, 1)}
+	CountrySetLesotho                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 98, 1)}
+	CountrySetLiberia                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 99, 1)}
+	CountrySetLibya                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 100, 1)}
+	CountrySetLiechtenstein                = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 101, 1)}
+	CountrySetLithuania                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 102, 1)}
+	CountrySetLuxembourg                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 103, 1)}
+	CountrySetMadagascar                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 104, 1)}
+	CountrySetMalawi                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 105, 1)}
+	CountrySetMalaysia                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 106, 1)}
+	CountrySetMaldives                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 107, 1)}
+	CountrySetMali                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 108, 1)}
+	CountrySetMalta                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 109, 1)}
+	CountrySetMarshallIslands              = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 110, 1)}
+	CountrySetMauritania                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 111, 1)}
+	CountrySetMauritius                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 112, 1)}
+	CountrySetMexico                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 113, 1)}
+	CountrySetFederatedStatesOfMicronesia  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 114, 1)}
+	CountrySetMoldova                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 115, 1)}
+	CountrySetMonaco                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 116, 1)}
+	CountrySetMongolia                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 117, 1)}
+	CountrySetMontenegro                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 118, 1)}
+	CountrySetMorocco                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 119, 1)}
+	CountrySetMozambique                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 120, 1)}
+	CountrySetMyanmar                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 121, 1)}
+	CountrySetNamibia                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 122, 1)}
+	CountrySetNauru                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 123, 1)}
+	CountrySetNepal                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 124, 1)}
+	CountrySetNetherlands                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 125, 1)}
+	CountrySetNewZealand                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 126, 1)}
+	CountrySetNicaragua                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 127, 1)}
+	CountrySetNiger                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 128, 1)}
+	CountrySetNigeria                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 129, 1)}
+	CountrySetNorthMacedonia               = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 130, 1)}
+	CountrySetNorway                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 131, 1)}
+	CountrySetOman                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 132, 1)}
+	CountrySetPakistan                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 133, 1)}
+	CountrySetPalau                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 134, 1)}
+	CountrySetPanama                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 135, 1)}
+	CountrySetPapuaNewGuinea               = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 136, 1)}
+	CountrySetParaguay                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 137, 1)}
+	CountrySetPeru                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 138, 1)}
+	CountrySetPhilippines                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 139, 1)}
+	CountrySetPoland                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 140, 1)}
+	CountrySetPortugal                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 141, 1)}
+	CountrySetQatar                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 142, 1)}
+	CountrySetRomania                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 143, 1)}
+	CountrySetRussia                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 144, 1)}
+	CountrySetRwanda                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 145, 1)}
+	CountrySetSaintKittsAndNevis           = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 146, 1)}
+	CountrySetSaintLucia                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 147, 1)}
+	CountrySetSaintVincentAndTheGrenadines = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 148, 1)}
+	CountrySetSamoa                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 149, 1)}
+	CountrySetSanMarino                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 150, 1)}
+	CountrySetSaoTomeAndPrincipe           = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 151, 1)}
+	CountrySetSaudiArabia                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 152, 1)}
+	CountrySetSenegal                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 153, 1)}
+	CountrySetSerbia                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 154, 1)}
+	CountrySetSeychelles                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 155, 1)}
+	CountrySetSierraLeone                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 156, 1)}
+	CountrySetSingapore                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 157, 1)}
+	CountrySetSlovakia                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 158, 1)}
+	CountrySetSlovenia                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 159, 1)}
+	CountrySetSolomonIslands               = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 160, 1)}
+	CountrySetSomalia                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 161, 1)}
+	CountrySetSouthAfrica                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 162, 1)}
+	CountrySetSpain                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 163, 1)}
+	CountrySetSriLanka                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 164, 1)}
+	CountrySetSudan                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 165, 1)}
+	CountrySetSouthSudan                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 166, 1)}
+	CountrySetSuriname                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 167, 1)}
+	CountrySetSweden                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 168, 1)}
+	CountrySetSwitzerland                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 169, 1)}
+	CountrySetSyria                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 170, 1)}
+	CountrySetTaiwan                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 171, 1)}
+	CountrySetTajikistan                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 172, 1)}
+	CountrySetTanzania                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 173, 1)}
+	CountrySetThailand                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 174, 1)}
+	CountrySetTogo                         = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 175, 1)}
+	CountrySetTonga                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 176, 1)}
+	CountrySetTrinidadAndTobago            = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 177, 1)}
+	CountrySetTunisia                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 178, 1)}
+	CountrySetTurkey                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 179, 1)}
+	CountrySetTurkmenistan                 = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 180, 1)}
+	CountrySetTuvalu                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 181, 1)}
+	CountrySetUganda                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 182, 1)}
+	CountrySetUkraine                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 183, 1)}
+	CountrySetUnitedArabEmirates           = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 184, 1)}
+	CountrySetUnitedKingdom                = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 185, 1)}
+	CountrySetUnitedStates                 = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 186, 1)}
+	CountrySetUruguay                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 187, 1)}
+	CountrySetUzbekistan                   = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 188, 1)}
+	CountrySetVanuatu                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 189, 1)}
+	CountrySetVaticanCity                  = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 190, 1)}
+	CountrySetVenezuela                    = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 191, 1)}
+	CountrySetVietnam                      = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 192, 1)}
+	CountrySetYemen                        = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 193, 1)}
+	CountrySetZambia                       = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 194, 1)}
+	CountrySetZimbabwe                     = CountrySet{big.NewInt(0).SetBit(big.NewInt(0), 195, 1)}
+)
+
+var _CountryToFlagMap = map[Country]CountrySet{
+	Afghanistan:                  CountrySetAfghanistan,
+	Albania:                      CountrySetAlbania,
+	Algeria:                      CountrySetAlgeria,
+	Andorra:                      CountrySetAndorra,
+	Angola:                       CountrySetAngola,
+	AntiguaAndBarbuda:            CountrySetAntiguaAndBarbuda,
+	Argentina:                    CountrySetArgentina,
+	Armenia:                      CountrySetArmenia,
+	Australia:                    CountrySetAustralia,
+	Austria:                      CountrySetAustria,
+	Azerbaijan:                   CountrySetAzerbaijan,
+	TheBahamas:                   CountrySetTheBahamas,
+	Bahrain:                      CountrySetBahrain,
+	Bangladesh:                   CountrySetBangladesh,
+	Barbados:                     CountrySetBarbados,
+	Belarus:                      CountrySetBelarus,
+	Belgium:                      CountrySetBelgium,
+	Belize:                       CountrySetBelize,
+	Benin:                        CountrySetBenin,
+	Bhutan:                       CountrySetBhutan,
+	Bolivia:                      CountrySetBolivia,
+	BosniaAndHerzegovina:         CountrySetBosniaAndHerzegovina,
+	Botswana:                     CountrySetBotswana,
+	Brazil:                       CountrySetBrazil,
+	Brunei:                       CountrySetBrunei,
+	Bulgaria:                     CountrySetBulgaria,
+	BurkinaFaso:                  CountrySetBurkinaFaso,
+	Burundi:                      CountrySetBurundi,
+	CaboVerde:                    CountrySetCaboVerde,
+	Cambodia:                     CountrySetCambodia,
+	Cameroon:                     CountrySetCameroon,
+	Canada:                       CountrySetCanada,
+	CentralAfricanRepublic:       CountrySetCentralAfricanRepublic,
+	Chad:                         CountrySetChad,
+	Chile:                        CountrySetChile,
+	China:                        CountrySetChina,
+	Colombia:                     CountrySetColombia,
+	Comoros:                      CountrySetComoros,
+	DemocraticRepublicOfTheCongo: CountrySetDemocraticRepublicOfTheCongo,
+	RepublicOfTheCongo:           CountrySetRepublicOfTheCongo,
+	CostaRica:                    CountrySetCostaRica,
+	CôteDIvoire:                  CountrySetCôteDIvoire,
+	Croatia:                      CountrySetCroatia,
+	Cuba:                         CountrySetCuba,
+	Cyprus:                       CountrySetCyprus,
+	CzechRepublic:                CountrySetCzechRepublic,
+	Denmark:                      CountrySetDenmark,
+	Djibouti:                     CountrySetDjibouti,
+	Dominica:                     CountrySetDominica,
+	DominicanRepublic:            CountrySetDominicanRepublic,
+	EastTimor:                    CountrySetEastTimor,
+	Ecuador:                      CountrySetEcuador,
+	Egypt:                        CountrySetEgypt,
+	ElSalvador:                   CountrySetElSalvador,
+	EquatorialGuinea:             CountrySetEquatorialGuinea,
+	Eritrea:                      CountrySetEritrea,
+	Estonia:                      CountrySetEstonia,
+	Eswatini:                     CountrySetEswatini,
+	Ethiopia:                     CountrySetEthiopia,
+	Fiji:                         CountrySetFiji,
+	Finland:                      CountrySetFinland,
+	France:                       CountrySetFrance,
+	Gabon:                        CountrySetGabon,
+	TheGambia:                    CountrySetTheGambia,
+	Georgia:                      CountrySetGeorgia,
+	Germany:                      CountrySetGermany,
+	Ghana:                        CountrySetGhana,
+	Greece:                       CountrySetGreece,
+	Grenada:                      CountrySetGrenada,
+	Guatemala:                    CountrySetGuatemala,
+	Guinea:                       CountrySetGuinea,
+	GuineaBissau:                 CountrySetGuineaBissau,
+	Guyana:                       CountrySetGuyana,
+	Haiti:                        CountrySetHaiti,
+	Honduras:                     CountrySetHonduras,
+	Hungary:                      CountrySetHungary,
+	Iceland:                      CountrySetIceland,
+	India:                        CountrySetIndia,
+	Indonesia:                    CountrySetIndonesia,
+	Iran:                         CountrySetIran,
+	Iraq:                         CountrySetIraq,
+	Ireland:                      CountrySetIreland,
+	Israel:                       CountrySetIsrael,
+	Italy:                        CountrySetItaly,
+	Jamaica:                      CountrySetJamaica,
+	Japan:                        CountrySetJapan,
+	Jordan:                       CountrySetJordan,
+	Kazakhstan:                   CountrySetKazakhstan,
+	Kenya:                        CountrySetKenya,
+	Kiribati:                     CountrySetKiribati,
+	NorthKorea:                   CountrySetNorthKorea,
+	SouthKorea:                   CountrySetSouthKorea,
+	Kosovo:                       CountrySetKosovo,
+	Kuwait:                       CountrySetKuwait,
+	Kyrgyzstan:                   CountrySetKyrgyzstan,
+	Laos:                         CountrySetLaos,
+	Latvia:                       CountrySetLatvia,
+	Lebanon:                      CountrySetLebanon,
+	Lesotho:                      CountrySetLesotho,
+	Liberia:                      CountrySetLiberia,
+	Libya:                        CountrySetLibya,
+	Liechtenstein:                CountrySetLiechtenstein,
+	Lithuania:                    CountrySetLithuania,
+	Luxembourg:                   CountrySetLuxembourg,
+	Madagascar:                   CountrySetMadagascar,
+	Malawi:                       CountrySetMalawi,
+	Malaysia:                     CountrySetMalaysia,
+	Maldives:                     CountrySetMaldives,
+	Mali:                         CountrySetMali,
+	Malta:                        CountrySetMalta,
+	MarshallIslands:              CountrySetMarshallIslands,
+	Mauritania:                   CountrySetMauritania,
+	Mauritius:                    CountrySetMauritius,
+	Mexico:                       CountrySetMexico,
+	FederatedStatesOfMicronesia:  CountrySetFederatedStatesOfMicronesia,
+	Moldova:                      CountrySetMoldova,
+	Monaco:                       CountrySetMonaco,
+	Mongolia:                     CountrySetMongolia,
+	Montenegro:                   CountrySetMontenegro,
+	Morocco:                      CountrySetMorocco,
+	Mozambique:                   CountrySetMozambique,
+	Myanmar:                      CountrySetMyanmar,
+	Namibia:                      CountrySetNamibia,
+	Nauru:                        CountrySetNauru,
+	Nepal:                        CountrySetNepal,
+	Netherlands:                  CountrySetNetherlands,
+	NewZealand:                   CountrySetNewZealand,
+	Nicaragua:                    CountrySetNicaragua,
+	Niger:                        CountrySetNiger,
+	Nigeria:                      CountrySetNigeria,
+	NorthMacedonia:               CountrySetNorthMacedonia,
+	Norway:                       CountrySetNorway,
+	Oman:                         CountrySetOman,
+	Pakistan:                     CountrySetPakistan,
+	Palau:                        CountrySetPalau,
+	Panama:                       CountrySetPanama,
+	PapuaNewGuinea:               CountrySetPapuaNewGuinea,
+	Paraguay:                     CountrySetParaguay,
+	Peru:                         CountrySetPeru,
+	Philippines:                  CountrySetPhilippines,
+	Poland:                       CountrySetPoland,
+	Portugal:                     CountrySetPortugal,
+	Qatar:                        CountrySetQatar,
+	Romania:                      CountrySetRomania,
+	Russia:                       CountrySetRussia,
+	Rwanda:                       CountrySetRwanda,
+	SaintKittsAndNevis:           CountrySetSaintKittsAndNevis,
+	SaintLucia:                   CountrySetSaintLucia,
+	SaintVincentAndTheGrenadines: CountrySetSaintVincentAndTheGrenadines,
+	Samoa:                        CountrySetSamoa,
+	SanMarino:                    CountrySetSanMarino,
+	SaoTomeAndPrincipe:           CountrySetSaoTomeAndPrincipe,
+	SaudiArabia:                  CountrySetSaudiArabia,
+	Senegal:                      CountrySetSenegal,
+	Serbia:                       CountrySetSerbia,
+	Seychelles:                   CountrySetSeychelles,
+	SierraLeone:                  CountrySetSierraLeone,
+	Singapore:                    CountrySetSingapore,
+	Slovakia:                     CountrySetSlovakia,
+	Slovenia:                     CountrySetSlovenia,
+	SolomonIslands:               CountrySetSolomonIslands,
+	Somalia:                      CountrySetSomalia,
+	SouthAfrica:                  CountrySetSouthAfrica,
+	Spain:                        CountrySetSpain,
+	SriLanka:                     CountrySetSriLanka,
+	Sudan:                        CountrySetSudan,
+	SouthSudan:                   CountrySetSouthSudan,
+	Suriname:                     CountrySetSuriname,
+	Sweden:                       CountrySetSweden,
+	Switzerland:                  CountrySetSwitzerland,
+	Syria:                        CountrySetSyria,
+	Taiwan:                       CountrySetTaiwan,
+	Tajikistan:                   CountrySetTajikistan,
+	Tanzania:                     CountrySetTanzania,
+	Thailand:                     CountrySetThailand,
+	Togo:                         CountrySetTogo,
+	Tonga:                        CountrySetTonga,
+	TrinidadAndTobago:            CountrySetTrinidadAndTobago,
+	Tunisia:                      CountrySetTunisia,
+	Turkey:                       CountrySetTurkey,
+	Turkmenistan:                 CountrySetTurkmenistan,
+	Tuvalu:                       CountrySetTuvalu,
+	Uganda:                       CountrySetUganda,
+	Ukraine:                      CountrySetUkraine,
+	UnitedArabEmirates:           CountrySetUnitedArabEmirates,
+	UnitedKingdom:                CountrySetUnitedKingdom,
+	UnitedStates:                 CountrySetUnitedStates,
+	Uruguay:                      CountrySetUruguay,
+	Uzbekistan:                   CountrySetUzbekistan,
+	Vanuatu:                      CountrySetVanuatu,
+	VaticanCity:                  CountrySetVaticanCity,
+	Venezuela:                    CountrySetVenezuela,
+	Vietnam:                      CountrySetVietnam,
+	Yemen:                        CountrySetYemen,
+	Zambia:                       CountrySetZambia,
+	Zimbabwe:                     CountrySetZimbabwe,
+}
+
+

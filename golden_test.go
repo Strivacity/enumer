@@ -42,6 +42,7 @@ var tests = []Golden{
 	{"dayWithPrefix", dayIn, config{addPrefix: "Day"}},
 	{"dayTrimAndPrefix", dayPrefixIn, config{trimPrefix: "Day", addPrefix: "Night"}},
 	{"daySet", dayIn, config{setDelimiter: ","}},
+	{"countrySet", countryIn, config{setDelimiter: ","}},
 	{"daySetTrimPrefix", dayPrefixIn, config{setDelimiter: ",", trimPrefix: "Day"}},
 	{"daySetStrict", dayIn, config{setDelimiter: ",", strictSet: true}},
 }
@@ -154,6 +155,208 @@ const (
 	p37 Prime = 31
 	p41 Prime = 41
 	p43 Prime = 43
+)
+`
+
+// Lots of enum values to test a set of enum values with more than 64 element
+const countryIn = `type Country int
+const (
+	Afghanistan Country = iota
+	Albania
+	Algeria
+	Andorra
+	Angola
+	AntiguaAndBarbuda
+	Argentina
+	Armenia
+	Australia
+	Austria
+	Azerbaijan
+	TheBahamas
+	Bahrain
+	Bangladesh
+	Barbados
+	Belarus
+	Belgium
+	Belize
+	Benin
+	Bhutan
+	Bolivia
+	BosniaAndHerzegovina
+	Botswana
+	Brazil
+	Brunei
+	Bulgaria
+	BurkinaFaso
+	Burundi
+	CaboVerde
+	Cambodia
+	Cameroon
+	Canada
+	CentralAfricanRepublic
+	Chad
+	Chile
+	China
+	Colombia
+	Comoros
+	DemocraticRepublicOfTheCongo
+	RepublicOfTheCongo
+	CostaRica
+	CôteDIvoire
+	Croatia
+	Cuba
+	Cyprus
+	CzechRepublic
+	Denmark
+	Djibouti
+	Dominica
+	DominicanRepublic
+	EastTimor
+	Ecuador
+	Egypt
+	ElSalvador
+	EquatorialGuinea
+	Eritrea
+	Estonia
+	Eswatini
+	Ethiopia
+	Fiji
+	Finland
+	France
+	Gabon
+	TheGambia
+	Georgia
+	Germany
+	Ghana
+	Greece
+	Grenada
+	Guatemala
+	Guinea
+	GuineaBissau
+	Guyana
+	Haiti
+	Honduras
+	Hungary
+	Iceland
+	India
+	Indonesia
+	Iran
+	Iraq
+	Ireland
+	Israel
+	Italy
+	Jamaica
+	Japan
+	Jordan
+	Kazakhstan
+	Kenya
+	Kiribati
+	NorthKorea
+	SouthKorea
+	Kosovo
+	Kuwait
+	Kyrgyzstan
+	Laos
+	Latvia
+	Lebanon
+	Lesotho
+	Liberia
+	Libya
+	Liechtenstein
+	Lithuania
+	Luxembourg
+	Madagascar
+	Malawi
+	Malaysia
+	Maldives
+	Mali
+	Malta
+	MarshallIslands
+	Mauritania
+	Mauritius
+	Mexico
+	FederatedStatesOfMicronesia
+	Moldova
+	Monaco
+	Mongolia
+	Montenegro
+	Morocco
+	Mozambique
+	Myanmar
+	Namibia
+	Nauru
+	Nepal
+	Netherlands
+	NewZealand
+	Nicaragua
+	Niger
+	Nigeria
+	NorthMacedonia
+	Norway
+	Oman
+	Pakistan
+	Palau
+	Panama
+	PapuaNewGuinea
+	Paraguay
+	Peru
+	Philippines
+	Poland
+	Portugal
+	Qatar
+	Romania
+	Russia
+	Rwanda
+	SaintKittsAndNevis
+	SaintLucia
+	SaintVincentAndTheGrenadines
+	Samoa
+	SanMarino
+	SaoTomeAndPrincipe
+	SaudiArabia
+	Senegal
+	Serbia
+	Seychelles
+	SierraLeone
+	Singapore
+	Slovakia
+	Slovenia
+	SolomonIslands
+	Somalia
+	SouthAfrica
+	Spain
+	SriLanka
+	Sudan
+	SouthSudan
+	Suriname
+	Sweden
+	Switzerland
+	Syria
+	Taiwan
+	Tajikistan
+	Tanzania
+	Thailand
+	Togo
+	Tonga
+	TrinidadAndTobago
+	Tunisia
+	Turkey
+	Turkmenistan
+	Tuvalu
+	Uganda
+	Ukraine
+	UnitedArabEmirates
+	UnitedKingdom
+	UnitedStates
+	Uruguay
+	Uzbekistan
+	Vanuatu
+	VaticanCity
+	Venezuela
+	Vietnam
+	Yemen
+	Zambia
+	Zimbabwe
 )
 `
 

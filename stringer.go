@@ -144,6 +144,7 @@ func main() {
 		g.Printf("\t\"encoding/json\"\n")
 	}
 	if cfg.setDelimiter != "" {
+		g.Printf("\t\"math/big\"\n")
 		g.Printf("\t\"math/bits\"\n")
 		g.Printf("\t\"strings\"\n")
 	}
